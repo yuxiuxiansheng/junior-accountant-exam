@@ -166,18 +166,10 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .wish-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - var(--tab-bar-height));padding:40px 20px;text-align:center;position:relative;overflow:hidden}
 .wish-page::before{content:'';position:absolute;top:-100px;left:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(79,110,247,.1) 0%,transparent 70%);border-radius:50%}
 .wish-page::after{content:'';position:absolute;bottom:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(82,196,26,.08) 0%,transparent 70%);border-radius:50%}
-.wish-emoji{font-size:64px;margin-bottom:20px;animation:bounce 2s infinite}
+.wish-emoji{font-size:64px;margin-bottom:24px;animation:bounce 2s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.wish-title{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--success));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;position:relative;z-index:1}
-.wish-sub{font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:30px;position:relative;z-index:1}
-.wish-card{background:var(--card);border-radius:var(--radius);padding:24px 20px;box-shadow:0 4px 20px rgba(0,0,0,.06);width:100%;max-width:320px;position:relative;z-index:1}
-.wish-card .wc-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.wish-card .wc-item:last-child{border-bottom:none}
-.wish-card .wc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.wish-card .wc-icon.i1{background:#EEF1FE}
-.wish-card .wc-icon.i2{background:#E8F8EE}
-.wish-card .wc-icon.i3{background:#FFF7E6}
-.wish-card .wc-text{font-size:14px;font-weight:500;text-align:left}
+.wish-title{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--success));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;position:relative;z-index:1}
+.wish-sub{font-size:14px;color:var(--text-light);line-height:1.8;position:relative;z-index:1}
 .wish-sparkles{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;z-index:0}
 .wish-sparkles span{position:absolute;font-size:20px;animation:float 3s ease-in-out infinite;opacity:.6}
 @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
@@ -312,34 +304,20 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
   </div>
   <div class="wish-emoji">🎓</div>
   <div class="wish-title">考的都会 · 蒙的都对</div>
-  <div class="wish-sub">愿你笔锋所至，皆是心之所向<br>每一份努力，都不被辜负</div>
-  <div class="wish-card">
-    <div class="wc-item">
-      <div class="wc-icon i1">📖</div>
-      <div class="wc-text">扎实基础，稳扎稳打</div>
-    </div>
-    <div class="wc-item">
-      <div class="wc-icon i2">🎯</div>
-      <div class="wc-text">精准复习，高效提分</div>
-    </div>
-    <div class="wc-item">
-      <div class="wc-icon i3">🏆</div>
-      <div class="wc-text">一次通过，顺利拿证</div>
-    </div>
-  </div>
+  <div class="wish-sub">愿你笔锋所至，皆是心之所向</div>
 </div>
 
 <div class="tab-bar">
   <div class="tab-item active" onclick="switchTab('home',this)">
-    <span class="tab-icon">📝</span>
+    <span class="tab-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
     <span class="tab-label">模拟</span>
   </div>
   <div class="tab-item" onclick="switchTab('kp',this)">
-    <span class="tab-icon">📚</span>
+    <span class="tab-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
     <span class="tab-label">知识点</span>
   </div>
   <div class="tab-item" onclick="switchTab('wish',this)">
-    <span class="tab-icon">🍀</span>
+    <span class="tab-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
     <span class="tab-label">祝愿</span>
   </div>
 </div>
