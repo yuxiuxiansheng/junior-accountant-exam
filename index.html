@@ -12,9 +12,10 @@
   --text:#1F2937;--text-secondary:#6B7280;--text-light:#9CA3AF;
   --bg:#F5F7FA;--card:#fff;--border:#E5E7EB;
   --radius:12px;--radius-sm:8px;
+  --tab-bar-height:56px;
 }
 html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent}
-.page{display:none;min-height:100vh;padding-bottom:20px}
+.page{display:none;min-height:calc(100vh - var(--tab-bar-height));padding-bottom:20px}
 .page.active{display:block}
 .header{position:sticky;top:0;z-index:100;background:var(--primary);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
 .header h1{font-size:17px;font-weight:600}
@@ -61,19 +62,18 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:active{background:var(--primary-light)}
 .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
-.btn-block{margin:20px 16px;width:calc(100% - 32px)}
 .exam-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);padding:12px 16px}
 .exam-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .exam-header-top .subject-name{font-size:15px;font-weight:600}
 .exam-header-top .timer{font-size:14px;font-weight:600;color:var(--primary);display:flex;align-items:center;gap:4px}
 .progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
 .progress-bar .fill{height:100%;background:var(--primary);border-radius:2px;transition:width .3s}
-.question-area{padding:16px}
-.question-nav{display:flex;gap:6px;overflow-x:auto;padding:0 16px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.question-nav{display:flex;gap:6px;padding:0 16px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .question-nav::-webkit-scrollbar{display:none}
 .q-nav-item{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--card);border:1.5px solid var(--border);cursor:pointer;transition:all .2s}
 .q-nav-item.current{background:var(--primary);color:#fff;border-color:var(--primary)}
 .q-nav-item.answered{background:var(--primary-bg);border-color:var(--primary);color:var(--primary)}
+.question-area{padding:16px}
 .q-type-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:10px}
 .q-type-badge.single{background:#EEF1FE;color:var(--primary)}
 .q-type-badge.multi{background:#FFF7E6;color:#D48806}
@@ -90,7 +90,7 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .option-item.selected .opt-letter{background:var(--primary);color:#fff}
 .option-item.correct .opt-letter{background:var(--success);color:#fff}
 .option-item.wrong .opt-letter{background:var(--error);color:#fff}
-.exam-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;z-index:100}
+.exam-footer{position:fixed;bottom:var(--tab-bar-height);left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;z-index:100}
 .exam-footer .btn{flex:1;padding:12px}
 .answer-analysis{margin-top:16px;padding:16px;background:#FAFBFC;border-radius:var(--radius-sm);border-left:3px solid var(--primary)}
 .answer-analysis h4{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--primary)}
@@ -130,8 +130,6 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .sheet-item{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--bg);cursor:pointer;border:1.5px solid transparent}
 .sheet-item.answered{background:var(--primary-bg);border-color:var(--primary);color:var(--primary)}
 .sheet-item.current{background:var(--primary);color:#fff}
-.sheet-item.wrong-mark{background:#FFF1F0;border-color:var(--error);color:var(--error)}
-.sheet-item.correct-mark{background:#F0FFF4;border-color:var(--success);color:var(--success)}
 .confirm-modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4)}
 .confirm-modal.show{display:flex}
 .confirm-box{background:#fff;border-radius:var(--radius);padding:24px;width:calc(100% - 64px);max-width:320px;text-align:center}
@@ -139,9 +137,50 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .confirm-box p{font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.5}
 .confirm-btns{display:flex;gap:10px}
 .confirm-btns .btn{flex:1;padding:12px;font-size:14px}
-.empty-state{text-align:center;padding:40px 20px;color:var(--text-light)}
-.empty-state .icon{font-size:48px;margin-bottom:12px}
-.empty-state p{font-size:14px}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-bar-height);background:#fff;border-top:1px solid var(--border);display:flex;z-index:150;padding-bottom:env(safe-area-inset-bottom)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--text-light);transition:color .2s;-webkit-tap-highlight-color:transparent}
+.tab-item.active{color:var(--primary)}
+.tab-item .tab-icon{font-size:22px;line-height:1}
+.tab-item .tab-label{font-size:10px;font-weight:600}
+.kp-page{padding-bottom:calc(var(--tab-bar-height) + 20px)}
+.kp-header{background:linear-gradient(135deg,var(--primary),var(--primary-light));padding:24px 20px 16px;color:#fff;text-align:center}
+.kp-header h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.kp-header p{font-size:13px;opacity:.8}
+.kp-tabs{display:flex;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.kp-tab{flex:1;padding:12px 8px;text-align:center;font-size:14px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.kp-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.kp-content{padding:16px}
+.kp-chapter{background:var(--card);border-radius:var(--radius);margin-bottom:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.kp-ch-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.kp-ch-header h3{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.kp-ch-header .ch-num{width:24px;height:24px;border-radius:6px;background:var(--primary-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.kp-ch-header .ch-arrow{font-size:12px;color:var(--text-light);transition:transform .2s}
+.kp-ch.expanded .ch-arrow{transform:rotate(90deg)}
+.kp-ch-body{display:none;padding:0 16px 14px}
+.kp-ch.expanded .kp-ch-body{display:block}
+.kp-point{padding:10px 0;border-top:1px solid var(--border)}
+.kp-point:first-child{border-top:none}
+.kp-point h4{font-size:13px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.kp-point .stars{color:var(--warning);font-size:11px}
+.kp-point p{font-size:12px;line-height:1.7;color:var(--text-secondary)}
+.wish-page{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - var(--tab-bar-height));padding:40px 20px;text-align:center;position:relative;overflow:hidden}
+.wish-page::before{content:'';position:absolute;top:-100px;left:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(79,110,247,.1) 0%,transparent 70%);border-radius:50%}
+.wish-page::after{content:'';position:absolute;bottom:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(82,196,26,.08) 0%,transparent 70%);border-radius:50%}
+.wish-emoji{font-size:64px;margin-bottom:20px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.wish-title{font-size:28px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--success));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:16px;position:relative;z-index:1}
+.wish-sub{font-size:16px;color:var(--text-secondary);line-height:1.8;margin-bottom:30px;position:relative;z-index:1}
+.wish-card{background:var(--card);border-radius:var(--radius);padding:24px 20px;box-shadow:0 4px 20px rgba(0,0,0,.06);width:100%;max-width:320px;position:relative;z-index:1}
+.wish-card .wc-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.wish-card .wc-item:last-child{border-bottom:none}
+.wish-card .wc-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.wish-card .wc-icon.i1{background:#EEF1FE}
+.wish-card .wc-icon.i2{background:#E8F8EE}
+.wish-card .wc-icon.i3{background:#FFF7E6}
+.wish-card .wc-text{font-size:14px;font-weight:500;text-align:left}
+.wish-sparkles{position:absolute;width:100%;height:100%;top:0;left:0;pointer-events:none;z-index:0}
+.wish-sparkles span{position:absolute;font-size:20px;animation:float 3s ease-in-out infinite;opacity:.6}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-20px) rotate(10deg)}}
 </style>
 </head>
 <body>
@@ -250,6 +289,61 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
   </div>
 </div>
 
+<div id="kpPage" class="page kp-page">
+  <div class="kp-header">
+    <h2>📚 知识点速览</h2>
+    <p>系统梳理核心考点，高效备考</p>
+  </div>
+  <div class="kp-tabs">
+    <div class="kp-tab active" onclick="switchKpSubject('practice',this)">初级会计实务</div>
+    <div class="kp-tab" onclick="switchKpSubject('law',this)">经济法基础</div>
+  </div>
+  <div class="kp-content" id="kpContent"></div>
+</div>
+
+<div id="wishPage" class="page wish-page">
+  <div class="wish-sparkles">
+    <span style="top:10%;left:10%;animation-delay:0s">✨</span>
+    <span style="top:20%;right:15%;animation-delay:.5s">🌟</span>
+    <span style="top:60%;left:8%;animation-delay:1s">💫</span>
+    <span style="top:70%;right:10%;animation-delay:1.5s">⭐</span>
+    <span style="top:40%;left:20%;animation-delay:.8s">✨</span>
+    <span style="top:85%;right:25%;animation-delay:2s">🌟</span>
+  </div>
+  <div class="wish-emoji">🎓</div>
+  <div class="wish-title">考的都会 · 蒙的都对</div>
+  <div class="wish-sub">愿你笔锋所至，皆是心之所向<br>每一份努力，都不被辜负</div>
+  <div class="wish-card">
+    <div class="wc-item">
+      <div class="wc-icon i1">📖</div>
+      <div class="wc-text">扎实基础，稳扎稳打</div>
+    </div>
+    <div class="wc-item">
+      <div class="wc-icon i2">🎯</div>
+      <div class="wc-text">精准复习，高效提分</div>
+    </div>
+    <div class="wc-item">
+      <div class="wc-icon i3">🏆</div>
+      <div class="wc-text">一次通过，顺利拿证</div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <div class="tab-item active" onclick="switchTab('home',this)">
+    <span class="tab-icon">📝</span>
+    <span class="tab-label">模拟</span>
+  </div>
+  <div class="tab-item" onclick="switchTab('kp',this)">
+    <span class="tab-icon">📚</span>
+    <span class="tab-label">知识点</span>
+  </div>
+  <div class="tab-item" onclick="switchTab('wish',this)">
+    <span class="tab-icon">🍀</span>
+    <span class="tab-label">祝愿</span>
+  </div>
+</div>
+
 <div class="sheet-modal" id="sheetModal">
   <div class="sheet-overlay" onclick="hideSheet()"></div>
   <div class="sheet-content">
@@ -271,216 +365,179 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 </div>
 
 <script>
+const KNOWLEDGE = {
+practice: [
+  {title:'第一章 概述',points:[
+    {name:'会计职能',stars:2,desc:'核算职能（最基本的职能）和监督职能。核算贯穿于经济活动全过程；监督是对经济活动的合法性、合理性审查。'},
+    {name:'会计基本假设',stars:3,desc:'会计主体、持续经营、会计分期、货币计量。注意会计主体与法律主体的区别。'},
+    {name:'权责发生制与收付实现制',stars:3,desc:'企业会计确认、计量、记录和报告应当以权责发生制为基础；政府预算会计以收付实现制为基础。'},
+    {name:'会计信息质量要求',stars:3,desc:'可靠性、相关性、可理解性、可比性、实质重于形式、重要性、谨慎性、及时性。重点关注谨慎性和实质重于形式。'},
+  ]},
+  {title:'第二章 会计基础',points:[
+    {name:'会计要素及其分类',stars:2,desc:'资产、负债、所有者权益、收入、费用、利润六大会计要素。资产=负债+所有者权益是静态等式；收入-费用=利润是动态等式。'},
+    {name:'借贷记账法',stars:2,desc:'以"借"和"贷"为记账符号，有借必有贷，借贷必相等。资产、成本、费用增加记借方；负债、所有者权益、收入增加记贷方。'},
+    {name:'会计凭证',stars:2,desc:'原始凭证和记账凭证。原始凭证不得外借，经批准可复制。记账凭证根据审核无误的原始凭证编制。'},
+    {name:'财产清查',stars:3,desc:'全面清查与局部清查、定期清查与不定期清查。现金清查采用实地盘点法；银行存款清查通过银行存款余额调节表。'},
+  ]},
+  {title:'第三章 流动资产',points:[
+    {name:'交易性金融资产',stars:3,desc:'取得时支付的交易费用计入投资收益（借方）；持有期间公允价值变动计入公允价值变动损益；处置时差额计入投资收益。'},
+    {name:'应收账款及减值',stars:3,desc:'应收账款入账价值包括价款、增值税和代垫运费。坏账准备计提：借：信用减值损失，贷：坏账准备。'},
+    {name:'发出存货计价方法',stars:2,desc:'个别计价法、先进先出法、月末一次加权平均法、移动加权平均法。计划成本法下需计算材料成本差异率。'},
+    {name:'存货清查及减值',stars:2,desc:'盘盈冲减管理费用；盘亏计入管理费用（收发差错）或营业外支出（非常原因）。存货跌价准备可转回。'},
+  ]},
+  {title:'第四章 非流动资产',points:[
+    {name:'固定资产折旧',stars:3,desc:'年限平均法、工作量法、双倍余额递减法、年数总和法。当月增加次月计提，当月减少次月停止。折旧费用按用途分配。'},
+    {name:'固定资产处置',stars:3,desc:'通过"固定资产清理"科目核算。处置净损益计入资产处置损益（出售、转让）或营业外收支（报废毁损）。'},
+    {name:'无形资产摊销',stars:3,desc:'使用寿命有限的无形资产自可供使用当月起摊销；使用寿命不确定的不摊销但需减值测试。摊销一般计入管理费用。'},
+  ]},
+  {title:'第五章 负债',points:[
+    {name:'应付职工薪酬',stars:3,desc:'包括短期薪酬、离职后福利、辞退福利等。自产产品作为福利发放视同销售，确认收入并计算销项税额。'},
+    {name:'应交增值税',stars:3,desc:'一般纳税人13%、9%、6%三档税率；进项税额不得抵扣情形（如集体福利、个人消费等）；视同销售行为需计算销项税额。'},
+    {name:'应交消费税',stars:3,desc:'从价定率、从量定额、复合计征三种征收方式。委托加工收回后直接销售的计入成本，连续生产的可抵扣。'},
+  ]},
+  {title:'第六章 所有者权益',points:[
+    {name:'实收资本',stars:3,desc:'接受投资者投入：借：银行存款等，贷：实收资本。资本公积转增资本不影响所有者权益总额。'},
+    {name:'留存收益',stars:2,desc:'包括盈余公积和未分配利润。提取法定盈余公积按净利润的10%；盈余公积补亏属于留存收益内部变动。'},
+  ]},
+  {title:'第七章 收入、费用和利润',points:[
+    {name:'收入确认五步法',stars:3,desc:'识别合同→识别单项履约义务→确定交易价格→分摊交易价格→确认收入。区分时段履约和时点履约。'},
+    {name:'期间费用',stars:3,desc:'销售费用（销售部门相关）、管理费用（行政管理部门相关）、财务费用（利息、手续费等）。车间折旧计入制造费用。'},
+    {name:'营业利润计算',stars:3,desc:'营业利润=营业收入-营业成本-税金及附加-销售费用-管理费用-财务费用+投资收益+公允价值变动收益+资产处置收益等。所得税费用影响净利润不影响营业利润。'},
+  ]},
+  {title:'第八章 财务报告',points:[
+    {name:'资产负债表',stars:3,desc:'反映某一特定日期财务状况。存货=原材料+库存商品+生产成本等；应收账款=应收账款借方余额-坏账准备。'},
+    {name:'利润表',stars:2,desc:'反映一定期间经营成果。编制依据：收入-费用=利润。'},
+    {name:'现金流量表',stars:2,desc:'经营活动、投资活动、筹资活动三类现金流。支付在建工程人员工资属于投资活动。'},
+  ]},
+  {title:'第九章 产品成本核算',points:[
+    {name:'辅助生产费用分配',stars:3,desc:'直接分配法、交互分配法、计划成本分配法。计划成本法下差额计入管理费用。'},
+    {name:'完工产品与在产品分配',stars:3,desc:'不计算在产品成本法、约当产量比例法、在产品按定额成本计价法等。约当产量需计算完工程度。'},
+  ]},
+  {title:'第十章 政府会计基础',points:[
+    {name:'政府会计要素',stars:3,desc:'预算会计要素：预算收入、预算支出、预算结余。财务会计要素：资产、负债、净资产、收入、费用。'},
+    {name:'平行记账',stars:2,desc:'纳入预算管理的现金收支业务，在进行财务会计核算的同时进行预算会计核算。'},
+  ]},
+],
+law: [
+  {title:'第一章 总论',points:[
+    {name:'法律主体',stars:2,desc:'自然人：完全民事行为能力（≥18周岁或16+独立收入）、限制民事行为能力（8-18周岁或不能完全辨认）、无民事行为能力（<8周岁或完全不能辨认）。'},
+    {name:'法律责任',stars:2,desc:'民事责任（停止侵害、赔偿损失等）、行政责任（警告、罚款、拘留等）、刑事责任（管制、拘役、有期徒刑等）。'},
+  ]},
+  {title:'第二章 会计法律制度',points:[
+    {name:'会计档案保管期限',stars:3,desc:'永久：年度财务报告、会计档案保管清册、销毁清册；30年：凭证、账簿、月度季度报告；10年：银行余额调节表、纳税申报表。'},
+    {name:'会计工作交接',stars:2,desc:'一般会计人员交接由会计机构负责人监交；会计机构负责人交接由单位负责人监交。'},
+  ]},
+  {title:'第三章 支付结算法律制度',points:[
+    {name:'银行结算账户',stars:3,desc:'基本存款账户（唯一，日常转账现金收付）、一般存款账户（可存不可取现金）、专用存款账户、临时存款账户（有效期最长2年）。'},
+    {name:'票据行为',stars:3,desc:'出票、背书、承兑、保证。背书不得附条件（附条件无效）；不得部分背书；记载"不得转让"后手再背书的原背书人不担责。'},
+    {name:'票据权利时效',stars:3,desc:'商业汇票出票人/承兑人：到期日起2年；支票出票人：出票日起6个月；前手追索权：被拒绝日起6个月；前手再追索权：清偿日起3个月。'},
+    {name:'支票',stars:2,desc:'限于见票即付，不得另行记载付款日期。提示付款期限：出票日起10日。可授权补记金额和收款人。'},
+  ]},
+  {title:'第四章 增值税与消费税',points:[
+    {name:'增值税征税范围',stars:3,desc:'销售货物、提供加工修理修配劳务、销售服务/无形资产/不动产、进口货物。视同销售：自产/委托加工货物用于集体福利/个人消费/投资/分配/赠送。'},
+    {name:'增值税进项抵扣',stars:3,desc:'不得抵扣：购进用于集体福利/个人消费/免税项目/简易计税。旅客运输服务可抵扣。餐饮服务、贷款服务、居民日常服务不得抵扣。'},
+    {name:'增值税税率',stars:2,desc:'13%：一般货物/劳务；9%：交通运输/建筑/农产品/水电燃气；6%：现代服务/金融服务/生活服务；0%：出口。'},
+    {name:'消费税征税方法',stars:3,desc:'从价定率（化妆品等）、从量定额（啤酒/黄酒/成品油）、复合计征（卷烟/白酒）。自产自用非连续生产应税消费品的于移送时纳税。'},
+  ]},
+  {title:'第五章 所得税法律制度',points:[
+    {name:'企业所得税不征税与免税',stars:3,desc:'不征税：财政拨款、行政事业性收费/政府性基金。免税：国债利息、居民企业间股息红利、非营利组织收入。'},
+    {name:'企业所得税扣除标准',stars:3,desc:'职工福利费14%、工会经费2%、职工教育经费8%；广宣费15%（超限结转）；业务招待费60%且≤营收5‰；公益性捐赠12%（超限结转3年）。'},
+    {name:'个人所得税专项附加扣除',stars:3,desc:'子女教育2000元/月/每孩、继续教育400或4800元/年、大病医疗80000元限额、住房贷款利息1000元/月、住房租金1500/1100/800元、赡养老人3000元/月、3岁以下婴幼儿照护2000元/月。'},
+    {name:'个人所得税综合所得',stars:3,desc:'工资薪金、劳务报酬、稿酬、特许权使用费。稿酬所得额=收入×(1-20%)×70%。年度汇算：6万基本减除+专项扣除+专项附加扣除。'},
+  ]},
+  {title:'第六章 财产和行为税',points:[
+    {name:'房产税',stars:2,desc:'从价计征：1.2%（余值=原值×(1-扣除比例)）；从租计征：12%（个人出租住房4%）。出典房屋由承典人缴纳。'},
+    {name:'契税',stars:2,desc:'承受方缴纳，税率3%-5%。房屋买卖、赠与、交换均需缴纳。'},
+    {name:'印花税',stars:2,desc:'合同、产权转移书据、营业账簿。注意免税项目：已缴纳印花税的凭证副本、财产所有人将财产赠给政府/社会福利单位/学校所立的书据。'},
+  ]},
+  {title:'第七章 税收征管法律制度',points:[
+    {name:'税款征收方式',stars:2,desc:'查账征收、查定征收、查验征收、定期定额征收。税务机关追征期限3年（纳税人原因），不受期限限制（偷税/抗税/骗税）。'},
+    {name:'税务行政复议',stars:2,desc:'纳税争议须先缴纳税款/滞纳金或担保，再申请复议，对复议不服方可起诉。不得收取费用。'},
+  ]},
+  {title:'第八章 劳动合同与社会保险',points:[
+    {name:'劳动合同必备条款',stars:3,desc:'用人单位信息、劳动者信息、合同期限、工作内容地点、工作时间休息休假、劳动报酬、社会保险。试用期、服务期、竞业限制为约定条款。'},
+    {name:'试用期规定',stars:3,desc:'合同<3月无试用期；3月-1年≤1月；1-3年≤2月；≥3年/无固定≤6月。同一单位同一劳动者只能约定一次。仅约定试用期的试用期不成立。'},
+    {name:'经济补偿金',stars:3,desc:'按工作年限计算，每满1年支付1个月工资。不满6个月支付半个月。月工资指解除合同前12个月平均工资。月工资高于当地3倍按3倍计，最高12年。'},
+    {name:'劳动仲裁',stars:2,desc:'时效1年。劳动仲裁是诉讼的前置程序（部分争议除外）。仲裁不收费。'},
+  ]},
+]
+};
+
 const QUESTIONS = {
 practice: [
-  {year:2024,type:'single',text:'甲公司为增值税一般纳税人，2023年11月，以其生产的300台空调作为福利发放给职工，每台成本为1500元，每台不含税市场售价为2000元。不考虑其他因素，甲公司应确认的应付职工薪酬金额为（　）元。',options:['678000','600000','450000','508500'],answer:[0],analysis:'甲公司应确认的应付职工薪酬金额=300×2000×(1+13%)=678000(元)。'},
-  {year:2024,type:'single',text:'企业转销无法支付的应付账款，应贷记的会计科目是（　）。',options:['营业外收入','主营业务收入','管理费用','其他业务收入'],answer:[0],analysis:'企业对于确实无法支付的应付账款应予以转销，按其账面余额计入营业外收入，借记"应付账款"科目，贷记"营业外收入"科目。'},
-  {year:2024,type:'single',text:'下列关于企业留存收益的说法中，正确的是（　）。',options:['不包括净利润','是企业内部积累','包括注册资本和资本公积','不包括历年利润'],answer:[1],analysis:'留存收益是企业从历年实现的利润中提取或形成的留存于企业的内部积累，包括盈余公积和未分配利润。'},
-  {year:2024,type:'single',text:'某事业单位为增值税小规模纳税人，购入一台不需要安装的专用设备，设备价款和增值税税额合计为565000元，由财政直接支付。该事业单位购入固定资产的账务处理为（　）。',options:['借：固定资产565000　贷：财政拨款预算收入565000','借：事业支出565000　贷：财政拨款收入565000','借：固定资产565000　贷：财政拨款收入565000　借：事业支出565000　贷：财政拨款预算收入565000','借：固定资产565000　贷：事业收入565000'],answer:[2],analysis:'事业单位购入固定资产时：借：固定资产565000　贷：财政拨款收入565000；同时，在预算会计中：借：事业支出565000　贷：财政拨款预算收入565000。'},
-  {year:2024,type:'single',text:'在财政直接支付方式下，年度终了，单位根据本年度财政直接支付预算指标数与当年财政直接支付实际支出数的差额，在预算会计中，应借记（　）科目。',options:['财政应返还额度','资金结存——财政应返还额度','财政拨款预算收入','零余额账户用款额度'],answer:[1],analysis:'在财政直接支付方式下，年度终了，单位根据本年度财政直接支付预算指标数与当年财政直接支付实际支出数的差额，在预算会计中借记"资金结存——财政应返还额度"科目，贷记"财政拨款预算收入"科目。'},
-  {year:2024,type:'single',text:'采用预收款方式确认事业（预算）收入，实际收到预收款项时，预算会计中应作的账务处理是（　）。',options:['借记"银行存款"科目，贷记"预收账款"科目','借记"银行存款"科目，贷记"事业预算收入"科目','借记"资金结存——货币资金"，贷记"事业预算收入"科目','借记"银行存款——货币资金"，贷记"预收账款"科目'],answer:[2],analysis:'采用预收款方式确认事业（预算）收入，实际收到预收款项时，在预算会计中借记"资金结存——货币资金"科目，贷记"事业预算收入"科目。'},
-  {year:2023,type:'single',text:'下列各项业务中，应编制付款凭证的是（　）。',options:['收回前欠货款40000元','购入材料70000元，货款未付','以银行存款归还前欠货款60000元','接受投资者投入资金90000元'],answer:[2],analysis:'选项A、D应编制收款凭证；选项B应编制转账凭证；选项C涉及银行存款减少，应编制付款凭证。'},
-  {year:2023,type:'single',text:'下列各项中，应采用数量金额式账簿的是（　）。',options:['原材料明细账','管理费用明细账','生产成本明细账','主营业务收入明细账'],answer:[0],analysis:'数量金额式账簿可以反映财产物资的实物数量和价值量。故原材料、库存商品等明细账一般采用数量金额式账簿。'},
-  {year:2023,type:'single',text:'甲企业为增值税小规模纳税人，原材料采用计划成本核算，A材料计划成本每吨为30元，本期购进A材料5000吨，收到增值税专用发票上注明的价款总额为140000元，增值税税额为18200元，另发生运杂费2000元，增值税税额为180元。原材料运抵企业后验收入库原材料4995吨，运输途中合理损耗5吨，购进A材料发生的成本差异（超支）为（　）元。',options:['10350','10380','7850','10530'],answer:[3],analysis:'购进A材料的实际成本=140000+18200+2000+180=160380（元），计划成本=(5000-5)×30=149850（元），超支差=160380-149850=10530（元）。'},
-  {year:2023,type:'single',text:'企业未设置"预付账款"科目，发生预付货款业务时应借记的会计科目是（　）。',options:['预收账款','其他应付款','应收账款','应付账款'],answer:[3],analysis:'企业未设置"预付账款"科目，发生预付货款业务时应借记"应付账款"科目。'},
-  {year:2022,type:'single',text:'下列各项中，不影响营业利润的是（　）。',options:['出售原材料净收益','计提存货跌价准备','出售固定资产净损失','确认所得税费用'],answer:[3],analysis:'所得税费用影响净利润，不影响营业利润。出售原材料净收益计入其他业务收入，计提存货跌价准备计入资产减值损失，出售固定资产净损失计入资产处置损益，均影响营业利润。'},
-  {year:2022,type:'single',text:'某企业年初未分配利润为100万元，本年实现净利润500万元，按10%提取法定盈余公积，宣告发放现金股利200万元，该企业年末未分配利润为（　）万元。',options:['350','360','400','500'],answer:[1],analysis:'年末未分配利润=100+500-500×10%-200=360（万元）。'},
-  {year:2022,type:'single',text:'下列各项中，应计入管理费用的是（　）。',options:['预计产品质量保证损失','排污费','专设销售机构固定资产折旧费','汇兑损益'],answer:[1],analysis:'选项A计入销售费用；选项B排污费计入管理费用；选项C计入销售费用；选项D计入财务费用。'},
-  {year:2021,type:'single',text:'下列各项中，属于企业在产品的是（　）。',options:['已验收入库的完工产品','已完成销售手续的产品','正在加工中的产品','已入库尚待加工的原材料'],answer:[2],analysis:'在产品是指正在加工中的产品，尚未完工。已验收入库的完工产品和已完成销售手续的产品属于产成品，已入库尚待加工的原材料属于原材料。'},
-  {year:2021,type:'single',text:'某企业采用先进先出法计算发出原材料的成本。2021年9月1日，甲材料结存200千克，每千克实际成本为300元；9月7日购入甲材料350千克，每千克实际成本为310元；9月21日购入甲材料400千克，每千克实际成本为290元；9月28日发出甲材料500千克。9月份甲材料发出成本为（　）元。',options:['153000','152500','152000','151500'],answer:[0],analysis:'发出成本=200×300+300×310=60000+93000=153000（元）。'},
-  {year:2021,type:'single',text:'下列各项中，应通过"其他应收款"科目核算的是（　）。',options:['应收销售商品款','应收租入包装物租金','应收提供劳务款','应收股利'],answer:[1],analysis:'选项A、C通过"应收账款"核算；选项B通过"其他应收款"核算；选项D通过"应收股利"核算。'},
-  {year:2020,type:'single',text:'某饮料生产企业为增值税一般纳税人，年末将本企业生产的一批饮料发放给职工作为福利。该批饮料市场售价为12万元（不含增值税），增值税税率为13%，实际成本为10万元。假定不考虑其他因素，该企业应确认的应付职工薪酬为（　）万元。',options:['10','11.3','12','13.56'],answer:[3],analysis:'将自产产品用于职工福利，要确认收入，应付职工薪酬=12+12×13%=13.56(万元)。'},
-  {year:2020,type:'single',text:'某企业计提生产车间管理人员基本养老保险费120000元。下列各项中，关于该事项的会计处理正确的是（　）。',options:['借：管理费用120000　贷：应付职工薪酬——设定提存计划120000','借：制造费用120000　贷：应付职工薪酬——设定提存计划120000','借：制造费用120000　贷：银行存款120000','借：制造费用120000　贷：其他应付款120000'],answer:[1],analysis:'计提生产车间管理人员的养老保险费：借：制造费用120000　贷：应付职工薪酬——设定提存计划——基本养老保险费120000。'},
-  {year:2020,type:'single',text:'某企业年初所有者权益总额为500万元，当年以资本公积转增资本50万元，实现净利润200万元，提取盈余公积20万元，向投资者分配利润50万元。该企业年末所有者权益总额为（　）万元。',options:['650','700','600','750'],answer:[0],analysis:'资本公积转增资本、提取盈余公积属于所有者权益内部增减变动，不影响总额。年末所有者权益=500+200-50=650(万元)。'},
-  {year:2020,type:'single',text:'下列各项中，关于无形资产摊销的会计处理表述正确的是（　）。',options:['无形资产摊销额均计入当期损益','出租的无形资产摊销额计入营业外支出','使用寿命不确定的无形资产不应摊销','使用寿命有限的无形资产自可供使用下月起开始摊销'],answer:[2],analysis:'选项A，无形资产摊销额可能计入制造费用等；选项B，出租的无形资产摊销额计入其他业务成本；选项C正确，使用寿命不确定的无形资产不应摊销；选项D，应自可供使用当月起开始摊销。'},
-  {year:2024,type:'multi',text:'下列各项中，属于政府会计主体资产的有（　）。',options:['在建工程','长期投资','保障性住房','自然资源资产'],answer:[0,1,2,3],analysis:'政府会计主体的资产按照流动性，分为流动资产和非流动资产。其中，非流动资产包括固定资产、在建工程、无形资产、长期投资、公共基础设施、政府储备资产、文物文化资产、保障性住房和自然资源资产等。'},
-  {year:2024,type:'multi',text:'下列各项中，应通过"应付职工薪酬——非货币性福利"科目核算的有（　）。',options:['计提职工教育经费','为高级管理人员提供免费使用的汽车折旧费','为职工代垫医药费','作为职工福利发放给职工的自产产品'],answer:[1,3],analysis:'选项B、D都是通过"应付职工薪酬——非货币性福利"核算；选项A通过"应付职工薪酬"科目核算，但不通过"非货币性福利"明细科目；选项C通过"其他应收款"科目核算。'},
-  {year:2023,type:'multi',text:'下列各项中，属于企业流动资产的有（　）。',options:['应收账款','预付账款','工程物资','存货'],answer:[0,1,3],analysis:'流动资产包括货币资金、应收及预付款项、交易性金融资产、存货等。工程物资属于非流动资产。'},
-  {year:2023,type:'multi',text:'下列各项中，影响企业营业利润的有（　）。',options:['出售原材料收入','计提固定资产减值准备','公益捐赠支出','出售无形资产净收益'],answer:[0,1,3],analysis:'选项A计入其他业务收入；选项B计入资产减值损失；选项C计入营业外支出，不影响营业利润；选项D计入资产处置损益。'},
-  {year:2022,type:'multi',text:'下列各项中，应计入存货成本的有（　）。',options:['采购价款','运输途中的合理损耗','入库前的挑选整理费','增值税进项税额'],answer:[0,1,2],analysis:'存货成本包括采购价款、运输途中的合理损耗、入库前的挑选整理费等。增值税进项税额可以抵扣，不计入存货成本。'},
-  {year:2022,type:'multi',text:'下列各项中，属于企业无形资产的有（　）。',options:['专利权','商标权','土地使用权','商誉'],answer:[0,1,2],analysis:'无形资产包括专利权、非专利技术、商标权、著作权、土地使用权等。商誉不属于无形资产，单独确认。'},
-  {year:2021,type:'multi',text:'下列各项中，属于企业留存收益的有（　）。',options:['实收资本','资本公积','盈余公积','未分配利润'],answer:[2,3],analysis:'留存收益包括盈余公积和未分配利润。实收资本和资本公积不属于留存收益。'},
-  {year:2021,type:'multi',text:'下列各项中，会引起企业资产和负债同时增加的有（　）。',options:['向银行借款存入银行','赊购原材料','收到投资者投入资本','以银行存款偿还应付账款'],answer:[0,1],analysis:'选项A，资产（银行存款）增加，负债（短期借款）增加；选项B，资产（原材料）增加，负债（应付账款）增加；选项C，资产增加，所有者权益增加；选项D，资产减少，负债减少。'},
-  {year:2020,type:'multi',text:'下列各项中，属于企业流动负债的有（　）。',options:['应付账款','预收账款','长期借款','应付职工薪酬'],answer:[0,1,3],analysis:'流动负债包括短期借款、应付及预收款项、应付职工薪酬等。长期借款属于非流动负债。'},
-  {year:2020,type:'multi',text:'下列各项中，关于产品成本计算分步法的表述正确的有（　）。',options:['适用于大量大批的多步骤生产','成本计算期与产品的生产周期一致','需要计算和结转各步骤半成品成本','不能为各生产步骤在产品的实物管理和资金管理提供资料'],answer:[0,2],analysis:'分步法适用于大量大批的多步骤生产；需要计算和结转各步骤半成品成本；成本计算期与会计报告期一致，而非生产周期；能为各步骤在产品的实物管理和资金管理提供资料。'},
-  {year:2024,type:'judge',text:'所有者权益变动表中"综合收益总额"项目，反映净利润和其他综合收益扣除所得税影响后的净额相加后的合计金额。（　）',options:['正确','错误'],answer:[0],analysis:'所有者权益变动表中"综合收益总额"项目，反映净利润和其他综合收益扣除所得税影响后的净额相加后的合计金额。表述正确。'},
-  {year:2024,type:'judge',text:'消耗性生物资产发生减值一经计提，不可转回。（　）',options:['正确','错误'],answer:[1],analysis:'消耗性生物资产减值的影响因素已经消失的，减记金额应当予以恢复，并在原已计提的跌价准备金额内转回，转回的金额计入当期损益。'},
-  {year:2024,type:'judge',text:'高危行业企业如有按国家规定提取安全生产费的，应当在资产负债表所有者权益项下的"其他综合收益"项目和"盈余公积"项目之间增设"专项储备"项目。（　）',options:['正确','错误'],answer:[0],analysis:'高危行业企业如有按国家规定提取安全生产费的，应当在资产负债表所有者权益项下增设"专项储备"项目，反映企业提取的安全生产费期末余额。'},
-  {year:2023,type:'judge',text:'到期的银行承兑汇票企业无力支付时，应转入"应付账款"科目。（　）',options:['正确','错误'],answer:[1],analysis:'到期的银行承兑汇票企业无力支付时，应转入"短期借款"科目，而非"应付账款"科目。'},
-  {year:2023,type:'judge',text:'短期借款利息在预提或实际支付时均应通过"短期借款"科目核算。（　）',options:['正确','错误'],answer:[1],analysis:'预提的利息通过"应付利息"科目核算，不通过"短期借款"科目。预提时，借：财务费用，贷：应付利息。'},
-  {year:2023,type:'judge',text:'因解除与职工的劳动关系给予的补偿，属于企业短期薪酬核算范围。（　）',options:['正确','错误'],answer:[1],analysis:'因解除与职工的劳动关系给予的补偿属于辞退福利，是长期职工薪酬的内容，不属于短期薪酬。'},
-  {year:2022,type:'judge',text:'企业发生的借款利息费用，应当计入当期损益。（　）',options:['正确','错误'],answer:[1],analysis:'企业发生的借款利息费用，满足资本化条件的应当予以资本化，计入相关资产成本，不应当全部计入当期损益。'},
-  {year:2022,type:'judge',text:'企业出售固定资产的净损失，应确认为企业的营业外支出。（　）',options:['正确','错误'],answer:[1],analysis:'企业出售固定资产的净损失，应通过"资产处置损益"科目核算，不计入营业外支出。'},
-  {year:2021,type:'judge',text:'资产负债表日企业按工资总额的一定比例缴存基本养老保险属于设定提存计划，应确认为应付职工薪酬。（　）',options:['正确','错误'],answer:[0],analysis:'资产负债表日企业按工资总额的一定比例缴存基本养老保险属于设定提存计划，应确认为应付职工薪酬。'},
-  {year:2021,type:'judge',text:'企业采用计划成本核算原材料，发出材料应负担的材料成本差异应当按期（月）分摊，不得在季末或年末一次计算。（　）',options:['正确','错误'],answer:[0],analysis:'企业采用计划成本核算原材料，发出材料应负担的材料成本差异应当按期（月）分摊，不得在季末或年末一次计算。'},
-  {year:2020,type:'judge',text:'非货币性福利不能确认受益对象时，应当计入当期损益和应付职工薪酬。（　）',options:['正确','错误'],answer:[0],analysis:'非货币性福利不能确认受益对象时，应当计入当期损益和应付职工薪酬。'},
-  {year:2020,type:'judge',text:'企业取得交易性金融资产时支付的交易费用，应计入投资收益。（　）',options:['正确','错误'],answer:[0],analysis:'企业取得交易性金融资产时支付的交易费用，应计入投资收益的借方。'},
-  {year:2024,type:'indefinite',text:'甲公司为增值税一般纳税人，适用的增值税税率为13%。2023年12月发生如下经济业务：（1）将自产的300台空调作为福利发放给职工，每台成本1500元，每台不含税市场售价2000元；（2）购入一批原材料，增值税专用发票上注明的价款为50000元，增值税税额为6500元；（3）销售一批商品，不含税售价为100000元，成本为70000元，款项已收。根据上述资料，下列说法正确的有（　）。',options:['业务（1）应确认应付职工薪酬678000元','业务（1）应确认主营业务收入600000元','业务（2）原材料入账价值为56500元','业务（3）应确认主营业务收入100000元'],answer:[0,1,3],analysis:'业务（1）：应付职工薪酬=300×2000×(1+13%)=678000元，同时确认主营业务收入600000元；业务（2）：原材料入账价值为50000元（不含增值税）；业务（3）：确认主营业务收入100000元。'},
-  {year:2023,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年发生的有关经济业务如下：（1）4月1日，向银行借入一笔生产经营用短期借款，共计200000元，期限为6个月，年利率为6%，按月计提利息，到期一次还本付息；（2）5月31日，计提上述短期借款利息；（3）10月1日，偿还短期借款本金和利息。根据上述资料，下列说法正确的有（　）。',options:['4月1日借入短期借款，应贷记"短期借款"科目200000元','5月31日计提利息，应借记"财务费用"科目1000元','5月31日计提利息，应贷记"应付利息"科目1000元','10月1日偿还本息，应借记"短期借款"科目200000元和"应付利息"科目6000元'],answer:[0,1,2,3],analysis:'月利息=200000×6%÷12=1000元；4-9月共6个月利息=6000元。计提利息时：借：财务费用1000，贷：应付利息1000。偿还时：借：短期借款200000、应付利息6000，贷：银行存款206000。'},
-  {year:2022,type:'indefinite',text:'甲公司2022年度利润总额为500万元，适用的企业所得税税率为25%。甲公司当年发生如下纳税调整事项：（1）国债利息收入10万元；（2）行政罚款支出5万元；（3）当年发生研发费用100万元，符合税法规定的加计扣除比例为75%。不考虑其他因素，根据上述资料，下列说法正确的有（　）。',options:['国债利息收入应调减应纳税所得额10万元','行政罚款支出应调增应纳税所得额5万元','研发费用加计扣除应调减应纳税所得额75万元','甲公司2022年应交所得税为105万元'],answer:[0,1,2,3],analysis:'应纳税所得额=500-10+5-75=420(万元)；应交所得税=420×25%=105(万元)。国债利息收入免税调减10万元；行政罚款不得税前扣除调增5万元；研发费用加计扣除调减100×75%=75万元。'},
-  {year:2021,type:'indefinite',text:'甲公司为增值税一般纳税人，2021年发生如下与固定资产相关的经济业务：（1）3月10日，购入一台不需要安装的生产设备，增值税专用发票上注明的价款为100000元，增值税税额为13000元，另支付运杂费2000元，增值税税额为180元，全部款项以银行存款支付；（2）该设备预计使用年限为5年，预计净残值为4000元，采用年限平均法计提折旧；（3）该设备于2021年4月开始计提折旧。根据上述资料，下列说法正确的有（　）。',options:['该设备的入账价值为102000元','该设备的入账价值为115180元','2021年该设备应计提折旧额为14700元','2021年该设备应计提折旧额为19600元'],answer:[0,2],analysis:'设备入账价值=100000+2000=102000元（不含增值税）；月折旧额=(102000-4000)÷(5×12)=1633.33元；2021年计提9个月（4-12月），折旧额=1633.33×9≈14700元。'},
-  {year:2020,type:'indefinite',text:'甲公司为增值税一般纳税人，2020年发生如下经济业务：（1）5月1日，购入一批原材料，增值税专用发票上注明的价款为200000元，增值税税额为26000元，材料已验收入库，款项通过银行转账支付；（2）5月10日，领用该批原材料的60%用于生产产品，10%用于车间一般耗用，5%用于行政管理部门；（3）5月31日，该批原材料剩余25%。根据上述资料，下列说法正确的有（　）。',options:['购入原材料的入账价值为200000元','生产产品领用原材料120000元','车间一般耗用原材料20000元','行政管理部门领用原材料10000元'],answer:[0,1,2,3],analysis:'原材料入账价值=200000元（不含增值税）；生产产品领用=200000×60%=120000元；车间一般耗用=200000×10%=20000元；行政管理部门领用=200000×5%=10000元。'},
-  {year:2019,type:'single',text:'某企业采用计划成本法分配辅助生产费用时，应将生产车间实际发生的费用与按计划单位成本分配转出的费用之间的差额计入的会计科目是（　）。',options:['制造费用','管理费用','生产成本','销售费用'],answer:[1],analysis:'采用计划成本分配法，应将生产车间实际发生的费用与按计划单位成本分配转出的费用之间的差额采用简化计算方法，全部计入管理费用。'},
-  {year:2019,type:'single',text:'企业对可能承担的环保责任确认为预计负债，体现会计信息质量要求的是（　）。',options:['谨慎性','可比性','重要性','相关性'],answer:[0],analysis:'谨慎性要求企业不得高估资产和收入、不得低估负债和费用。对可能承担的环保责任确认预计负债体现了谨慎性。'},
-  {year:2019,type:'single',text:'引起所有者权益总额增加的是（　）。',options:['资本公积金转资本','经股东大会批准宣告股利','盈余公积补亏','接受投资者追加投资'],answer:[3],analysis:'选项A不影响所有者权益总额；选项B减少所有者权益；选项C不影响所有者权益总额；选项D接受投资者追加投资使所有者权益总额增加。'},
-  {year:2019,type:'single',text:'生产费用在完工产品与在产品之间分配，可以采用不计算在产品成本法，属于该法的前提条件是（　）。',options:['各月在产品数量变动很大','各月在产品数量变动很小','各月末在产品数量小','各月末在产品数量大'],answer:[2],analysis:'不计算在产品成本法适用于各月末在产品数量很小的产品。'},
-  {year:2019,type:'single',text:'某人每年年末存入银行10万元，假定年利率为6%，期数为10年，已知（P/A，6%，10）=7.3601，则相当于现在一次性存入（　）万元。',options:['5.584','17.908','13.181','73.601'],answer:[3],analysis:'年金现值=10×7.3601=73.601(万元)。'},
-  {year:2019,type:'single',text:'下列各项中，企业确认当期销售部门使用车辆应交纳的车船税，应借记的会计科目是（　）。',options:['税金及附加','其他业务成本','管理费用','销售费用'],answer:[0],analysis:'车船税应通过"税金及附加"科目核算。'},
-  {year:2019,type:'single',text:'某企业短期经营租入管理用办公设备一批，月租金为2000元（含增值税），每季度末一次性支付本季度租金。该企业1月31日计提租入设备租金时相关会计科目处理正确的是（　）。',options:['贷记"预收账款"科目2000元','贷记"应付账款"科目2000元','贷记"预付账款"科目2000元','贷记"其他应付款"科目2000元'],answer:[3],analysis:'应付经营租赁固定资产租金通过"其他应付款"科目核算。'},
-  {year:2019,type:'single',text:'下列各项中，导致企业当期营业利润减少的是（　）。',options:['租出非专利技术的摊销额','对外公益性捐赠的商品成本','支付的税收滞纳金','自然灾害导致生产线报废净损失'],answer:[0],analysis:'选项A计入其他业务成本，影响营业利润；选项B、C、D均计入营业外支出，不影响营业利润。'},
-  {year:2018,type:'single',text:'下列各项中，关于企业存货的表述正确的是（　）。',options:['存货包括日常活动中持有以备出售的产品','存货的采购成本包括可抵扣的增值税','存货发生减值后不得转回','存货采用先进先出法计价体现谨慎性'],answer:[0],analysis:'存货是指企业在日常活动中持有以备出售的产品或商品、处在生产过程中的在产品等。可抵扣增值税不计入采购成本；存货跌价准备可以转回；先进先出法不体现谨慎性。'},
-  {year:2018,type:'single',text:'某企业年初未分配利润为200万元，本年实现净利润800万元，提取法定盈余公积80万元，宣告发放现金股利300万元，该企业年末未分配利润为（　）万元。',options:['620','540','700','620'],answer:[0],analysis:'年末未分配利润=200+800-80-300=620(万元)。'},
-  {year:2018,type:'single',text:'下列各项中，应计入产品成本的是（　）。',options:['固定资产报废净损失','行政管理部门固定资产折旧费','生产车间固定资产折旧费','专设销售机构固定资产折旧费'],answer:[2],analysis:'生产车间固定资产折旧费计入制造费用，最终分配计入产品成本。'},
-  {year:2018,type:'single',text:'某企业采用移动加权平均法计算发出材料成本。5月1日甲材料结存300千克，单价2万元；5月6日发出100千克；5月10日购进200千克，单价2.2万元；5月15日发出200千克。5月15日结存的原材料成本为（　）万元。',options:['400','416','420','440'],answer:[2],analysis:'5月10日单位成本=(200×2+200×2.2)÷(200+200)=2.1万元；5月15日结存=(200+200-200)×2.1=420万元。'},
-  {year:2017,type:'single',text:'甲公司收到投资者作为资本投入的固定资产，合同约定价值为1500万元，公允价值为1528万元。假定不考虑增值税和资本溢价因素，甲公司应计入实收资本的金额是（　）万元。',options:['0','28','1500','1528'],answer:[3],analysis:'企业接受投资者以固定资产出资的，应按投资合同或协议约定的价值入账，不公允的除外。合同价值与公允价值不一致时，以公允价值为准。'},
-  {year:2017,type:'single',text:'下列各项中，应通过"其他应付款"科目核算的是（　）。',options:['应付供货方货款','应付存入保证金','应付短期借款利息','应付职工工资'],answer:[1],analysis:'存入保证金通过"其他应付款"核算；选项A通过"应付账款"；选项C通过"应付利息"；选项D通过"应付职工薪酬"。'},
-  {year:2017,type:'single',text:'某企业为增值税一般纳税人，适用的增值税税率为17%。2017年6月，该企业将自产的200台空调作为福利发放给职工，每台成本为800元，每台不含税市场售价为1000元。该企业应确认的应付职工薪酬为（　）元。',options:['160000','200000','234000','184000'],answer:[2],analysis:'应付职工薪酬=200×1000×(1+17%)=234000(元)。'},
-  {year:2016,type:'single',text:'下列各项中，关于现金清查结果的会计处理表述不正确的是（　）。',options:['应支付给有关人员的现金溢余计入其他应付款','应由责任人赔偿的现金短缺计入其他应收款','无法查明原因的现金溢余计入营业外收入','无法查明原因的现金短缺计入营业外支出'],answer:[3],analysis:'无法查明原因的现金短缺应计入管理费用，而非营业外支出。'},
-  {year:2016,type:'single',text:'某企业按面值发行3年期、到期一次还本付息、票面利率为5%的债券，面值总额为1000万元。该债券年末应付债券的账面余额为（　）万元（假设发行后第一年末）。',options:['1025','1050','1000','975'],answer:[0],analysis:'年末应付债券账面余额=1000+1000×5%=1025(万元)。'},
-  {year:2016,type:'single',text:'下列各项中，不属于企业现金流量表中"筹资活动产生的现金流量"的是（　）。',options:['吸收投资收到的现金','分配股利支付的现金','处置子公司收到的现金','偿还债务支付的现金'],answer:[2],analysis:'处置子公司收到的现金属于投资活动产生的现金流量。'},
-  {year:2015,type:'single',text:'下列各项中，属于会计最基本的职能的是（　）。',options:['监督职能','核算职能','拓展职能','计算职能'],answer:[1],analysis:'会计核算贯穿于经济活动的全过程，是会计最基本的职能。'},
-  {year:2015,type:'single',text:'某商品流通企业为增值税一般纳税人，采购甲商品100件，每件进价6万元，增值税税额为78万元，另支付采购费用10万元。该批商品的单位成本为（　）万元。',options:['6','6.1','6.88','6.78'],answer:[1],analysis:'单位成本=(100×6+10)÷100=6.1(万元)。'},
-  {year:2015,type:'single',text:'某企业采用先进先出法计算发出材料的成本。3月1日结存A材料200吨，每吨实际成本200元；3月4日购进300吨，每吨180元；3月17日购进400吨，每吨220元；3月10日发出400吨，3月27日发出350吨。A材料月末账面余额为（　）元。',options:['30000','30333','32040','33000'],answer:[3],analysis:'月末结存=200+300+400-400-350=150吨；月末账面余额=150×220=33000(元)。'},
-  {year:2019,type:'multi',text:'下列各项中，关于期间费用的处理正确的有（　）。',options:['董事会会费应计入管理费用','管理部门的劳动保险费属于销售费用核算的内容','销售人员工资计入销售费用','季节性停工损失应计入管理费用'],answer:[0,2],analysis:'董事会会费计入管理费用；劳动保险费计入管理费用（非销售费用）；销售人员工资计入销售费用；季节性停工损失计入制造费用。'},
-  {year:2019,type:'multi',text:'下列各项中，影响企业利润表"利润总额"项目的有（　）。',options:['销售费用','财务费用','所得税费用','主营业务成本'],answer:[0,1,3],analysis:'所得税费用影响净利润，不影响利润总额。销售费用、财务费用、主营业务成本均影响利润总额。'},
-  {year:2018,type:'multi',text:'下列各项中，企业需暂估入账的有（　）。',options:['月末已验收入库但发票账单未到的原材料','已发出商品但货款很可能无法收回的商品销售','已达到预定可使用状态但尚未办理竣工决算的办公楼','董事会已通过但股东大会尚未批准的拟分配现金股利'],answer:[0,2],analysis:'月末已验收入库但发票未到的原材料应暂估入账；已达到预定可使用状态但未办竣工决算的办公楼应暂估入账。'},
-  {year:2017,type:'multi',text:'下列各项中，不会引起留存收益总额发生增减变动的有（　）。',options:['资本公积转增资本','盈余公积转增资本','盈余公积补亏损','发生业务招待费'],answer:[0,2],analysis:'资本公积转增资本不影响留存收益；盈余公积补亏属于留存收益内部变动，不影响总额；盈余公积转增资本使留存收益减少；业务招待费使留存收益减少。'},
-  {year:2017,type:'multi',text:'下列各项中，属于事业单位固定资产的有（　）。',options:['房屋建筑物','文物和陈列品','图书、档案','专用设备'],answer:[0,1,2,3],analysis:'事业单位固定资产包括房屋及建筑物、专用设备、一般设备、文物和陈列品、图书、其他固定资产等。'},
-  {year:2016,type:'multi',text:'下列各项中，关于消费税的会计处理表述正确的有（　）。',options:['企业销售应税消费品应交纳的消费税计入税金及附加','在建办公楼领用应税消费品应交的消费税计入在建工程','进口环节应交的消费税计入应交税费','委托加工环节受托方代扣代缴的消费税计入委托加工物资的成本'],answer:[0,1],analysis:'进口环节消费税计入所购物资成本；委托加工环节消费税，收回后直接销售的计入成本，连续生产的计入应交税费。'},
-  {year:2015,type:'multi',text:'下列各项中，属于企业流动资产的有（　）。',options:['货币资金','应收及预付款项','长期股权投资','存货'],answer:[0,1,3],analysis:'流动资产包括货币资金、应收及预付款项、存货等。长期股权投资属于非流动资产。'},
-  {year:2019,type:'judge',text:'"实收资本"账户的期末余额等于期初余额加上本期贷方发生额减去本期借方发生额。（　）',options:['正确','错误'],answer:[0],analysis:'实收资本属于所有者权益类账户，期末余额=期初余额+本期贷方发生额-本期借方发生额。'},
-  {year:2018,type:'judge',text:'短期借款的账面余额包含所计提的利息金额。（　）',options:['正确','错误'],answer:[1],analysis:'短期借款的账面余额不包含计提的利息，利息通过"应付利息"科目核算。'},
-  {year:2017,type:'judge',text:'企业发生的商业折扣应当按照扣除商业折扣后的金额确定商品销售收入。（　）',options:['正确','错误'],answer:[0],analysis:'企业采用商业折扣方式销售商品的，应按扣除商业折扣后的金额确定商品销售收入。'},
-  {year:2016,type:'judge',text:'企业出售固定资产的净收益应计入营业外收入。（　）',options:['正确','错误'],answer:[0],analysis:'企业出售固定资产的净收益应计入营业外收入（注：2017年后改为资产处置损益，但2016年考试时仍计入营业外收入）。'},
-  {year:2015,type:'judge',text:'企业计提的存货跌价准备，在以后期间不得转回。（　）',options:['正确','错误'],answer:[1],analysis:'存货跌价准备在以后期间可以转回，转回的金额计入当期损益。'},
-  {year:2019,type:'indefinite',text:'甲公司为增值税一般纳税人，2019年发生的有关经济业务如下：（1）4月1日，向银行借入生产经营用短期借款200000元，期限6个月，年利率6%，按月计提利息，到期一次还本付息；（2）5月31日，计提上述短期借款利息；（3）10月1日，偿还短期借款本金和利息。根据上述资料，下列说法正确的有（　）。',options:['4月1日借入短期借款应贷记"短期借款"科目200000元','5月31日计提利息应借记"财务费用"科目1000元','5月31日计提利息应贷记"应付利息"科目1000元','10月1日偿还本息应借记"短期借款"200000元和"应付利息"6000元'],answer:[0,1,2,3],analysis:'月利息=200000×6%÷12=1000元；4-9月共6个月利息=6000元。计提利息：借：财务费用1000，贷：应付利息1000。偿还时：借：短期借款200000、应付利息6000，贷：银行存款206000。'},
-  {year:2018,type:'indefinite',text:'甲公司为增值税一般纳税人，2018年发生如下经济业务：（1）销售商品一批，不含税售价为500000元，成本为350000元，款项已收；（2）购入原材料一批，增值税专用发票注明价款200000元，增值税34000元；（3）支付广告费30000元，增值税1800元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为85000元','业务（2）的进项税额为34000元','甲公司当月应纳增值税为49200元','甲公司当月应纳增值税为51000元'],answer:[0,1,2],analysis:'销项税额=500000×17%=85000元；进项税额=34000+1800=35800元；应纳增值税=85000-35800=49200元。'},
-  {year:2017,type:'indefinite',text:'甲公司为增值税一般纳税人，2017年发生如下经济业务：（1）将自产的200台空调作为福利发放给职工，每台成本800元，每台不含税市场售价1000元，增值税税率17%；（2）购入原材料一批，价款100000元，增值税17000元；（3）销售商品一批，不含税售价300000元，成本200000元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）应确认应付职工薪酬234000元','业务（1）应确认主营业务收入200000元','业务（2）原材料入账价值为117000元','业务（3）应确认主营业务收入300000元'],answer:[0,1,3],analysis:'业务（1）：应付职工薪酬=200×1000×(1+17%)=234000元，确认收入200000元；业务（2）：原材料入账价值=100000元（不含增值税）；业务（3）：确认收入300000元。'},
-  {year:2016,type:'indefinite',text:'甲公司2016年发生如下经济业务：（1）购入一台不需要安装的设备，价款100000元，增值税17000元，另支付运费3000元，全部以银行存款支付；（2）该设备预计使用5年，预计净残值5000元，采用年限平均法计提折旧；（3）该设备当月投入使用，次月开始计提折旧。根据上述资料，下列说法正确的有（　）。',options:['该设备的入账价值为103000元','该设备的入账价值为120000元','该设备月折旧额为1633.33元','该设备年折旧额为19600元'],answer:[0,2],analysis:'设备入账价值=100000+3000=103000元（不含增值税）；月折旧额=(103000-5000)÷(5×12)=1633.33元；年折旧额=1633.33×12=19600元。'},
-  {year:2015,type:'indefinite',text:'甲公司为增值税一般纳税人，2015年发生如下经济业务：（1）5月1日，购入一批原材料，增值税专用发票注明价款300000元，增值税51000元，材料已验收入库；（2）5月10日，领用该批原材料的50%用于生产产品，20%用于车间一般耗用，10%用于行政管理部门；（3）5月31日，该批原材料剩余20%。根据上述资料，下列说法正确的有（　）。',options:['购入原材料的入账价值为300000元','生产产品领用原材料150000元','车间一般耗用原材料60000元','行政管理部门领用原材料30000元'],answer:[0,1,2,3],analysis:'原材料入账价值=300000元；生产产品领用=300000×50%=150000元；车间一般耗用=300000×20%=60000元；行政管理部门领用=300000×10%=30000元。'},
   {year:2025,type:'single',text:'甲公司年初未弥补亏损400万元，本年实现净利润1000万元，提取法定盈余公积60万元。不考虑其他因素，甲公司年末未分配利润余额为（　）万元。',options:['540','1300','1000','600'],answer:[0],analysis:'年末未分配利润=1000-400-60=540(万元)。'},
   {year:2025,type:'single',text:'下列各项中，应计入财务费用的是（　）。',options:['办理银行汇票手续费','支付财务部门人员工资','支付会计师事务所审计费','支付财务软件的日常维修费'],answer:[0],analysis:'办理银行汇票手续费计入财务费用；财务部门人员工资计入管理费用；审计费计入管理费用；财务软件日常维修费计入管理费用。'},
   {year:2025,type:'single',text:'企业开出的银行承兑汇票到期无力支付时，应将该应付票据转入（　）科目。',options:['短期借款','应付账款','长期借款','应付票据'],answer:[0],analysis:'应付银行承兑汇票到期，企业无力支付票款，应将应付票据按账面余额转作短期借款。'},
   {year:2025,type:'single',text:'某企业生产A产品需要经过两道工序加工完成，第一道工序300小时，在产品数量400件；第二道工序200小时，在产品数量200件。假定各工序内在产品完工程度平均50%。则第一道工序在产品约当产量为（　）件。',options:['60','120','200','400'],answer:[1],analysis:'第一道工序完工程度=300×50%÷(300+200)=30%；第一道工序在产品约当产量=400×30%=120(件)。'},
-  {year:2025,type:'single',text:'下列各项中，企业应通过"应付票据"科目核算的是（　）。',options:['用转账支票购买周转材料','用银行汇票购买原材料','用银行本票购买办公用品','用商业汇票购买固定资产'],answer:[3],analysis:'应付票据是指企业购买材料、商品和接受服务等而开出、承兑的商业汇票。'},
-  {year:2025,type:'single',text:'下列各项中，属于负债类科目的是（　）。',options:['长期待摊费用','预付账款','应收账款','应交税费'],answer:[3],analysis:'长期待摊费用、预付账款、应收账款属于资产类科目；应交税费属于负债类科目。'},
-  {year:2025,type:'single',text:'甲公司为增值税一般纳税人，以银行存款购入一台不需要安装的生产设备，买价200万元，增值税26万元，运费20万元，增值税1.8万元，另付保险费1万元、装卸费3万元。该固定资产的入账价值为（　）万元。',options:['224','225.8','260.2','226.2'],answer:[0],analysis:'固定资产入账价值=200+20+1+3=224(万元)，增值税不计入固定资产入账价值。'},
-  {year:2025,type:'single',text:'下列各项中，导致企业所有者权益总额增加的事项是（　）。',options:['提取盈余公积','以盈余公积弥补以前年度亏损','资本公积转增资本','当年实现净利润'],answer:[3],analysis:'提取盈余公积、盈余公积补亏、资本公积转增资本均属于所有者权益内部变动，不影响总额。当年实现净利润使所有者权益总额增加。'},
   {year:2025,type:'single',text:'下列各项中，属于政府财务会计要素的是（　）。',options:['预算结余','净资产','预算收入','预算支出'],answer:[1],analysis:'政府财务会计要素包括资产、负债、净资产、收入和费用。预算结余、预算收入、预算支出属于预算会计要素。'},
-  {year:2025,type:'single',text:'某企业采用月末一次加权平均法计算发出材料成本，期初结存甲材料3000千克，单价8元；15日购入甲材料2000千克，单价10元；20日发出3500千克。该企业期末结存甲材料的实际成本为（　）元。',options:['13100','13500','13200','15000'],answer:[2],analysis:'加权平均单价=(3000×8+2000×10)÷(3000+2000)=8.8元；期末结存=(3000+2000-3500)×8.8=13200(元)。'},
-  {year:2025,type:'multi',text:'下列各项中，关于会计等式"资产=负债+所有者权益"的表述正确的有（　）。',options:['是编制企业利润表的理论依据','反映企业某一时期收入、费用和利润之间的关系','反映企业某一特定时点资产、负债和所有者权益三者之间的平衡关系','是编制企业资产负债表的理论依据'],answer:[2,3],analysis:'选项A、B描述的是"收入-费用=利润"这一会计等式。'},
-  {year:2025,type:'multi',text:'下列各项中，属于原始凭证审核的内容的有（　）。',options:['业务内容是否真实','应借、应贷会计科目是否正确','金额是否正确','经济业务是否符合国家法律法规'],answer:[0,2,3],analysis:'原始凭证审核内容包括真实性、合法性、合理性、完整性、正确性。应借应贷会计科目是否正确属于记账凭证审核内容。'},
-  {year:2025,type:'multi',text:'下列各项中，属于留存收益的有（　）。',options:['法定盈余公积','任意盈余公积','未分配利润','实收资本'],answer:[0,1,2],analysis:'留存收益包括法定盈余公积、任意盈余公积和未分配利润。实收资本不属于留存收益。'},
-  {year:2025,type:'multi',text:'下列各项中，企业应通过"周转材料"科目核算的有（　）。',options:['购入用于出租出借的包装物','为维修设备采购的价值较低的专用工具','为行政管理部门购买的低值易耗品','在建工程购入的专项材料'],answer:[0,1,2],analysis:'周转材料包括包装物和低值易耗品。在建工程购入的专项材料计入工程物资。'},
-  {year:2025,type:'multi',text:'下列各项核对中，属于账实核对的有（　）。',options:['现金日记账余额与现金实际库存数核对','银行存款日记账余额与银行对账单余额进行核对','各项债权明细账余额与对方单位账面记录核对','会计部门各财产明细账余额与保管财产部门有关明细账账面余额核对'],answer:[0,1,2],analysis:'选项D属于账账核对，不属于账实核对。'},
-  {year:2025,type:'judge',text:'原材料的日常收入、发出及结存可以采用实际成本核算，也可以采用计划成本核算，成本核算方法一经确认，不得随意变更。（　）',options:['正确','错误'],answer:[0],analysis:'原材料可以采用实际成本或计划成本核算，方法一经确认不得随意变更。'},
+  {year:2024,type:'single',text:'甲公司为增值税一般纳税人，2023年11月，以其生产的300台空调作为福利发放给职工，每台成本为1500元，每台不含税市场售价为2000元。不考虑其他因素，甲公司应确认的应付职工薪酬金额为（　）元。',options:['678000','600000','450000','508500'],answer:[0],analysis:'甲公司应确认的应付职工薪酬金额=300×2000×(1+13%)=678000(元)。'},
+  {year:2024,type:'single',text:'企业转销无法支付的应付账款，应贷记的会计科目是（　）。',options:['营业外收入','主营业务收入','管理费用','其他业务收入'],answer:[0],analysis:'企业对于确实无法支付的应付账款应予以转销，按其账面余额计入营业外收入。'},
+  {year:2024,type:'single',text:'下列关于企业留存收益的说法中，正确的是（　）。',options:['不包括净利润','是企业内部积累','包括注册资本和资本公积','不包括历年利润'],answer:[1],analysis:'留存收益是企业从历年实现的利润中提取或形成的留存于企业的内部积累，包括盈余公积和未分配利润。'},
+  {year:2023,type:'single',text:'下列各项业务中，应编制付款凭证的是（　）。',options:['收回前欠货款40000元','购入材料70000元，货款未付','以银行存款归还前欠货款60000元','接受投资者投入资金90000元'],answer:[2],analysis:'选项A、D应编制收款凭证；选项B应编制转账凭证；选项C涉及银行存款减少，应编制付款凭证。'},
+  {year:2023,type:'single',text:'下列各项中，应采用数量金额式账簿的是（　）。',options:['原材料明细账','管理费用明细账','生产成本明细账','主营业务收入明细账'],answer:[0],analysis:'数量金额式账簿可以反映财产物资的实物数量和价值量。故原材料、库存商品等明细账一般采用数量金额式账簿。'},
+  {year:2022,type:'single',text:'下列各项中，不影响营业利润的是（　）。',options:['出售原材料净收益','计提存货跌价准备','出售固定资产净损失','确认所得税费用'],answer:[3],analysis:'所得税费用影响净利润，不影响营业利润。'},
+  {year:2022,type:'single',text:'某企业年初未分配利润为100万元，本年实现净利润500万元，按10%提取法定盈余公积，宣告发放现金股利200万元，该企业年末未分配利润为（　）万元。',options:['350','360','400','500'],answer:[1],analysis:'年末未分配利润=100+500-500×10%-200=360(万元)。'},
+  {year:2021,type:'single',text:'某企业采用先进先出法计算发出原材料的成本。2021年9月1日，甲材料结存200千克，每千克实际成本为300元；9月7日购入甲材料350千克，每千克实际成本为310元；9月21日购入甲材料400千克，每千克实际成本为290元；9月28日发出甲材料500千克。9月份甲材料发出成本为（　）元。',options:['153000','152500','152000','151500'],answer:[0],analysis:'发出成本=200×300+300×310=60000+93000=153000(元)。'},
+  {year:2020,type:'single',text:'某饮料生产企业为增值税一般纳税人，年末将本企业生产的一批饮料发放给职工作为福利。该批饮料市场售价为12万元（不含增值税），增值税税率为13%，实际成本为10万元。假定不考虑其他因素，该企业应确认的应付职工薪酬为（　）万元。',options:['10','11.3','12','13.56'],answer:[3],analysis:'将自产产品用于职工福利，要确认收入，应付职工薪酬=12+12×13%=13.56(万元)。'},
+  {year:2019,type:'single',text:'企业对可能承担的环保责任确认为预计负债，体现会计信息质量要求的是（　）。',options:['谨慎性','可比性','重要性','相关性'],answer:[0],analysis:'谨慎性要求企业不得高估资产和收入、不得低估负债和费用。对可能承担的环保责任确认预计负债体现了谨慎性。'},
+  {year:2018,type:'single',text:'某企业年初未分配利润为200万元，本年实现净利润800万元，提取法定盈余公积80万元，宣告发放现金股利300万元，该企业年末未分配利润为（　）万元。',options:['620','540','700','620'],answer:[0],analysis:'年末未分配利润=200+800-80-300=620(万元)。'},
+  {year:2017,type:'single',text:'下列各项中，应通过"其他应付款"科目核算的是（　）。',options:['应付供货方货款','应付存入保证金','应付短期借款利息','应付职工工资'],answer:[1],analysis:'存入保证金通过"其他应付款"核算。'},
+  {year:2016,type:'single',text:'下列各项中，关于现金清查结果的会计处理表述不正确的是（　）。',options:['应支付给有关人员的现金溢余计入其他应付款','应由责任人赔偿的现金短缺计入其他应收款','无法查明原因的现金溢余计入营业外收入','无法查明原因的现金短缺计入营业外支出'],answer:[3],analysis:'无法查明原因的现金短缺应计入管理费用，而非营业外支出。'},
+  {year:2015,type:'single',text:'下列各项中，属于会计最基本的职能的是（　）。',options:['监督职能','核算职能','拓展职能','计算职能'],answer:[1],analysis:'会计核算贯穿于经济活动的全过程，是会计最基本的职能。'},
+  {year:2024,type:'multi',text:'下列各项中，属于政府会计主体资产的有（　）。',options:['在建工程','长期投资','保障性住房','自然资源资产'],answer:[0,1,2,3],analysis:'政府会计主体的资产按照流动性，分为流动资产和非流动资产。其中，非流动资产包括固定资产、在建工程、无形资产、长期投资、公共基础设施、政府储备资产、文物文化资产、保障性住房和自然资源资产等。'},
+  {year:2023,type:'multi',text:'下列各项中，属于企业流动资产的有（　）。',options:['应收账款','预付账款','工程物资','存货'],answer:[0,1,3],analysis:'流动资产包括货币资金、应收及预付款项、交易性金融资产、存货等。工程物资属于非流动资产。'},
+  {year:2022,type:'multi',text:'下列各项中，应计入存货成本的有（　）。',options:['采购价款','运输途中的合理损耗','入库前的挑选整理费','增值税进项税额'],answer:[0,1,2],analysis:'存货成本包括采购价款、运输途中的合理损耗、入库前的挑选整理费等。增值税进项税额可以抵扣，不计入存货成本。'},
+  {year:2021,type:'multi',text:'下列各项中，属于企业留存收益的有（　）。',options:['实收资本','资本公积','盈余公积','未分配利润'],answer:[2,3],analysis:'留存收益包括盈余公积和未分配利润。'},
+  {year:2020,type:'multi',text:'下列各项中，属于企业流动负债的有（　）。',options:['应付账款','预收账款','长期借款','应付职工薪酬'],answer:[0,1,3],analysis:'流动负债包括短期借款、应付及预收款项、应付职工薪酬等。长期借款属于非流动负债。'},
+  {year:2024,type:'judge',text:'所有者权益变动表中"综合收益总额"项目，反映净利润和其他综合收益扣除所得税影响后的净额相加后的合计金额。（　）',options:['正确','错误'],answer:[0],analysis:'所有者权益变动表中"综合收益总额"项目，反映净利润和其他综合收益扣除所得税影响后的净额相加后的合计金额。'},
+  {year:2023,type:'judge',text:'到期的银行承兑汇票企业无力支付时，应转入"应付账款"科目。（　）',options:['正确','错误'],answer:[1],analysis:'到期的银行承兑汇票企业无力支付时，应转入"短期借款"科目。'},
+  {year:2022,type:'judge',text:'企业发生的借款利息费用，应当计入当期损益。（　）',options:['正确','错误'],answer:[1],analysis:'企业发生的借款利息费用，满足资本化条件的应当予以资本化，计入相关资产成本。'},
+  {year:2021,type:'judge',text:'资产负债表日企业按工资总额的一定比例缴存基本养老保险属于设定提存计划，应确认为应付职工薪酬。（　）',options:['正确','错误'],answer:[0],analysis:'按工资总额的一定比例缴存基本养老保险属于设定提存计划，应确认为应付职工薪酬。'},
+  {year:2020,type:'judge',text:'企业取得交易性金融资产时支付的交易费用，应计入投资收益。（　）',options:['正确','错误'],answer:[0],analysis:'企业取得交易性金融资产时支付的交易费用，应计入投资收益的借方。'},
   {year:2025,type:'judge',text:'采用权益法核算长期股权投资，初始投资成本大于投资时应享有被投资单位可辨认净资产公允价值份额的，其差额计入投资收益。（　）',options:['正确','错误'],answer:[1],analysis:'初始投资成本大于投资时应享有被投资单位可辨认净资产公允价值份额的，不调整已确认的初始投资成本，差额不计入投资收益。'},
-  {year:2025,type:'judge',text:'企业支付给在建工程施工人员的工资，应在现金流量表"经营活动产生的现金流量"项目中列示。（　）',options:['正确','错误'],answer:[1],analysis:'支付给在建工程施工人员的工资属于投资活动产生的现金流量，不属于经营活动。'},
-  {year:2025,type:'judge',text:'企业取得长期借款用于购建固定资产的，在固定资产达到预定可使用状态后发生的利息支出，应当资本化计入在建工程成本。（　）',options:['正确','错误'],answer:[1],analysis:'固定资产达到预定可使用状态后发生的利息支出应计入财务费用，不应资本化。'},
-  {year:2025,type:'judge',text:'企业出售交易性金融资产，应将实际收到的价款与其账面余额的差额计入公允价值变动收益。（　）',options:['正确','错误'],answer:[1],analysis:'出售交易性金融资产，实际收到的价款与其账面余额的差额应计入投资收益，而非公允价值变动收益。'},
-  {year:2025,type:'judge',text:'单位负责人是本单位会计信息化工作的第一责任人。（　）',options:['正确','错误'],answer:[0],analysis:'单位负责人是本单位会计信息化工作的第一责任人。'},
-  {year:2025,type:'indefinite',text:'甲公司为增值税一般纳税人，2024年1月1日取得乙公司30%的股份，能够对乙公司施加重大影响。该长期股权投资账面余额为1200万元。2024年1月25日，乙公司宣告分配现金股利800万元；2024年乙公司实现净利润2000万元。不考虑其他因素，2024年甲公司长期股权投资的账面价值为（　）万元。根据上述资料，下列说法正确的有（　）。',options:['乙公司宣告分配现金股利时，甲公司应确认投资收益240万元','乙公司宣告分配现金股利时，甲公司应冲减长期股权投资240万元','乙公司实现净利润时，甲公司应确认投资收益600万元','2024年末甲公司长期股权投资的账面价值为1560万元'],answer:[1,2,3],analysis:'权益法下：宣告分配现金股利时冲减长期股权投资240万元(800×30%)，不确认投资收益；实现净利润时确认投资收益600万元(2000×30%)；年末账面价值=1200-240+600=1560万元。'},
-  {year:2025,type:'indefinite',text:'某企业某月发生以下支出：固定资产报废净损失40000元，税收滞纳金2000元，合同违约金10000元。根据上述资料，下列说法正确的有（　）。',options:['固定资产报废净损失应计入营业外支出','税收滞纳金应计入营业外支出','合同违约金应计入管理费用','应计入营业外支出的金额为52000元'],answer:[0,1,3],analysis:'固定资产报废净损失、税收滞纳金、合同违约金均计入营业外支出，合计=40000+2000+10000=52000元。'},
+  {year:2025,type:'judge',text:'企业支付给在建工程施工人员的工资，应在现金流量表"经营活动产生的现金流量"项目中列示。（　）',options:['正确','错误'],answer:[1],analysis:'支付给在建工程施工人员的工资属于投资活动产生的现金流量。'},
+  {year:2024,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年12月发生如下经济业务：（1）将自产的300台空调作为福利发放给职工，每台成本1500元，每台不含税市场售价2000元；（2）购入一批原材料，增值税专用发票上注明的价款为50000元，增值税税额为6500元；（3）销售一批商品，不含税售价为100000元，成本为70000元，款项已收。根据上述资料，下列说法正确的有（　）。',options:['业务（1）应确认应付职工薪酬678000元','业务（1）应确认主营业务收入600000元','业务（2）原材料入账价值为56500元','业务（3）应确认主营业务收入100000元'],answer:[0,1,3],analysis:'业务（1）：应付职工薪酬=300×2000×(1+13%)=678000元，同时确认主营业务收入600000元；业务（2）：原材料入账价值为50000元（不含增值税）；业务（3）：确认主营业务收入100000元。'},
+  {year:2023,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年发生的有关经济业务如下：（1）4月1日，向银行借入生产经营用短期借款200000元，期限为6个月，年利率为6%，按月计提利息，到期一次还本付息；（2）5月31日，计提上述短期借款利息；（3）10月1日，偿还短期借款本金和利息。根据上述资料，下列说法正确的有（　）。',options:['4月1日借入短期借款，应贷记"短期借款"科目200000元','5月31日计提利息，应借记"财务费用"科目1000元','5月31日计提利息，应贷记"应付利息"科目1000元','10月1日偿还本息，应借记"短期借款"科目200000元和"应付利息"科目6000元'],answer:[0,1,2,3],analysis:'月利息=200000×6%÷12=1000元；4-9月共6个月利息=6000元。'},
+  {year:2022,type:'indefinite',text:'甲公司2022年度利润总额为500万元，适用的企业所得税税率为25%。甲公司当年发生如下纳税调整事项：（1）国债利息收入10万元；（2）行政罚款支出5万元；（3）当年发生研发费用100万元，符合税法规定的加计扣除比例为75%。不考虑其他因素，下列说法正确的有（　）。',options:['国债利息收入应调减应纳税所得额10万元','行政罚款支出应调增应纳税所得额5万元','研发费用加计扣除应调减应纳税所得额75万元','甲公司2022年应交所得税为105万元'],answer:[0,1,2,3],analysis:'应纳税所得额=500-10+5-75=420(万元)；应交所得税=420×25%=105(万元)。'},
+  {year:2021,type:'indefinite',text:'甲公司为增值税一般纳税人，2021年发生如下与固定资产相关的经济业务：（1）3月10日，购入一台不需要安装的生产设备，增值税专用发票上注明的价款为100000元，增值税税额为13000元，另支付运杂费2000元，增值税税额为180元，全部款项以银行存款支付；（2）该设备预计使用年限为5年，预计净残值为4000元，采用年限平均法计提折旧；（3）该设备于2021年4月开始计提折旧。根据上述资料，下列说法正确的有（　）。',options:['该设备的入账价值为102000元','该设备的入账价值为115180元','2021年该设备应计提折旧额为14700元','2021年该设备应计提折旧额为19600元'],answer:[0,2],analysis:'设备入账价值=100000+2000=102000元（不含增值税）；月折旧额=(102000-4000)÷(5×12)=1633.33元；2021年计提9个月（4-12月），折旧额≈14700元。'},
+  {year:2020,type:'indefinite',text:'甲公司为增值税一般纳税人，2020年发生如下经济业务：（1）5月1日，购入一批原材料，增值税专用发票上注明的价款为200000元，增值税税额为26000元，材料已验收入库，款项通过银行转账支付；（2）5月10日，领用该批原材料的60%用于生产产品，10%用于车间一般耗用，5%用于行政管理部门；（3）5月31日，该批原材料剩余25%。根据上述资料，下列说法正确的有（　）。',options:['购入原材料的入账价值为200000元','生产产品领用原材料120000元','车间一般耗用原材料20000元','行政管理部门领用原材料10000元'],answer:[0,1,2,3],analysis:'原材料入账价值=200000元；生产产品领用=200000×60%=120000元；车间一般耗用=200000×10%=20000元；行政管理部门领用=200000×5%=10000元。'},
 ],
 law: [
-  {year:2024,type:'single',text:'根据关税法律制度的规定，对原产于与我国签订含有关税优惠条款的区域性贸易协定的国家或者地区的进口货物，适用的税率是（　）。',options:['最惠国税率','协定税率','特惠税率','普通税率'],answer:[1],analysis:'对原产于与我国签订含有关税优惠条款的区域性贸易协定的国家或者地区的进口货物，适用协定税率。'},
-  {year:2024,type:'single',text:'2023年度某小型企业财务资料显示会计利润为370万元，另有经税务机关核定的2022年亏损为70万元。假设无其他纳税调整事项，该企业2023年应纳税额为（　）万元。（企业所得税税率为25%）',options:['77.5','72.5','75','70'],answer:[2],analysis:'应纳税所得额=370-70=300(万元)，应纳税额=300×25%=75(万元)。'},
-  {year:2024,type:'single',text:'根据关税法律制度的规定，下列各项中，按复合税率征收关税的是（　）。',options:['啤酒','汽车','原油','摄像机'],answer:[3],analysis:'选项A、C实行从量计征；选项B实行从价计征；选项D摄像机实行复合计征。'},
-  {year:2024,type:'single',text:'王某自有一处平房，共16间，其中用于个人开餐馆的7间（房屋原值为20万元）。2023年1月1日，王某将4间出典给李某，取得出典价款收入12万元，将剩余的5间出租给某公司，每月收取租金1万元。已知该地区规定按照房产原值一次扣除20%后的余值计税，则王某2023年应纳房产税额为（　）。',options:['1.652万元','0.816万元','0.672万元','1.632万元'],answer:[3],analysis:'开餐馆的房产应纳房产税=20×(1-20%)×1.2%=0.192(万元)；房屋产权出典的，承典人为纳税人，王某无需缴纳房产税；出租房屋应纳房产税=1×12×12%=1.44(万元)；合计=0.192+1.44=1.632(万元)。'},
-  {year:2024,type:'single',text:'张某以140万元的价格出售普通住宅一套，该住宅在3年前以50万元购入，交易过程中支付相关税费等共计10万元（发票为证），则张某应缴纳的个人所得税为（　）万元。',options:['0','14.4','16','18'],answer:[2],analysis:'应纳税额=(收入总额-财产原值-合理费用)×20%=(140-50-10)×20%=16(万元)。'},
-  {year:2024,type:'single',text:'税务机关追征税款的期限为（　）年。',options:['3','5','2','10'],answer:[0],analysis:'因税务机关的责任，致使纳税人、扣缴义务人未缴或者少缴税款的，税务机关在3年内可以要求纳税人、扣缴义务人补缴税款。'},
-  {year:2023,type:'single',text:'下列自然人中，属于限制民事行为能力人的是（　）。',options:['李某，20周岁，系大学在校学生','张某，17周岁，依靠工资收入作为自己全部生活来源','刘某，9周岁，系小学三年级学生','王某，6周岁，经常登台演出并有一定收入'],answer:[2],analysis:'8周岁以上不满18周岁的未成年人为限制民事行为能力人。选项A为完全民事行为能力人；选项B视为完全民事行为能力人；选项D为无民事行为能力人（不满8周岁）。'},
-  {year:2023,type:'single',text:'根据《会计档案管理办法》的规定，下列会计档案应永久保存的是（　）。',options:['记账凭证','原始凭证','会计档案保管清册','半年度财务报告'],answer:[2],analysis:'永久保存的会计档案包括：年度财务报告、会计档案销毁清册、会计档案保管清册、会计档案鉴定意见书。'},
-  {year:2023,type:'single',text:'根据会计法律制度的规定，担任会计机构负责人，应当具备会计师以上专业技术职务资格或者从事会计工作达到一定期限以上。该期限为（　）。',options:['1年','2年','3年','5年'],answer:[2],analysis:'担任会计机构负责人或会计主管人员需具备会计师以上专业技术职务资格或者从事会计工作不少于3年。'},
-  {year:2023,type:'single',text:'甲公司成立后在某银行申请开立了一个用于办理日常转账结算和现金收付的账户，该账户性质属于（　）。',options:['基本存款账户','一般存款账户','专用存款账户','临时存款账户'],answer:[0],analysis:'基本存款账户是存款人因办理日常转账结算和现金收付需要开立的银行结算账户。'},
-  {year:2022,type:'single',text:'2021年3月1日，甲公司向乙公司签发一张由丙公司承兑的汇票，乙公司将该汇票背书转让给丁公司，同时丙公司提供票据保证，该汇票上的权利人是（　）。',options:['丙公司','乙公司','丁公司','甲公司'],answer:[2],analysis:'丁公司作为票据持有人，拥有票据权利，属于汇票上的权利人。'},
-  {year:2022,type:'single',text:'根据支付结算法律制度的规定，下列关于票据背书的表述中，正确的是（　）。',options:['以背书转让的票据，背书应当连续','背书时附有条件的，背书无效','委托收款背书的被背书人可再以背书转让票据权利','票据上第一背书人为出票人'],answer:[0],analysis:'选项B：背书附有条件的，所附条件不具有票据上的效力，背书有效；选项C：委托收款背书的被背书人不得再以背书转让票据权利；选项D：票据上的第一背书人为票据收款人。'},
-  {year:2022,type:'single',text:'下列关于银行汇票的表述中，不正确的是（　）。',options:['持票人向银行提示付款时，须同时提交银行汇票和解讫通知','银行汇票的提示付款期限自出票日起1个月','申请人和收款人均为单位的，可以签发现金银行汇票','银行汇票背书转让的金额以不超过出票金额的实际结算金额为准'],answer:[2],analysis:'申请人或者收款人为单位的，银行不得为其签发现金银行汇票。'},
-  {year:2022,type:'single',text:'根据支付结算法律制度的规定，下列各项票据中，"付款人名称"不是必须记载事项的是（　）。',options:['银行汇票','银行本票','商业汇票','支票'],answer:[1],analysis:'银行本票的出票人和付款人均为出票银行，因此付款人名称不是银行本票的必须记载事项。'},
-  {year:2021,type:'single',text:'根据增值税法律制度的规定，下列各项中，应缴纳增值税的是（　）。',options:['居民存款利息','个人转让著作权','残疾人组织直接进口供残疾人专用的物品','销售代销货物'],answer:[3],analysis:'选项A、B、C均属于免征增值税项目；选项D销售代销货物应缴纳增值税。'},
-  {year:2021,type:'single',text:'根据个人所得税法律制度的规定，下列各项中，属于综合所得的是（　）。',options:['利息股息红利所得','财产租赁所得','经营所得','劳务报酬所得'],answer:[3],analysis:'综合所得包括工资薪金所得、劳务报酬所得、稿酬所得、特许权使用费所得。'},
-  {year:2021,type:'single',text:'根据劳动合同法律制度的规定，下列关于劳动报酬的表述中，不正确的是（　）。',options:['工资应当以法定货币支付','工资至少每月支付一次','在法定休假日安排工作的，支付不低于工资300%的工资报酬','在休息日安排工作又不能安排补休的，支付不低于工资200%的工资报酬'],answer:[1],analysis:'工资至少每月支付一次的表述不够准确，应理解为实行月薪制的，工资每月支付一次；实行日薪制的，可按日或按周支付。但根据法律规定，工资应当以货币形式按月支付给劳动者本人。'},
-  {year:2020,type:'single',text:'根据支付结算法律制度的规定，下列关于国内信用证的表述中，正确的是（　）。',options:['国内信用证可以支取现金','国内信用证为不可撤销的跟单信用证','国内信用证的有效期最长不超过6个月','国内信用证的开证行可以是任何银行'],answer:[1],analysis:'国内信用证为不可撤销的跟单信用证；不可支取现金；有效期最长不超过1年；开证行须为银行业金融机构。'},
-  {year:2020,type:'single',text:'根据企业所得税法律制度的规定，下列各项中，属于不征税收入的是（　）。',options:['国债利息收入','财政拨款','符合条件的居民企业之间的股息收入','技术转让所得'],answer:[1],analysis:'不征税收入包括财政拨款、依法收取并纳入财政管理的行政事业性收费和政府性基金。选项A、C为免税收入；选项D为减免税优惠。'},
-  {year:2020,type:'single',text:'根据劳动合同法律制度的规定，用人单位自用工之日起超过1个月不满1年未与劳动者订立书面劳动合同的，应当向劳动者每月支付（　）倍的工资。',options:['1','1.5','2','3'],answer:[2],analysis:'用人单位自用工之日起超过1个月不满1年未与劳动者订立书面劳动合同的，应当向劳动者每月支付2倍的工资。'},
-  {year:2024,type:'multi',text:'根据支付结算法律制度的规定，关于票据追索权行使的下列表述中，正确的有（　）。',options:['持票人收到拒绝证明后，应当将被拒绝事由书面通知其前手','汇票被拒绝承兑的，持票人可以行使追索权','持票人可以对出票人、背书人、承兑人和保证人中的任何一人、数人或全体行使追索权','持票人不能出示拒绝证明或退票理由书的，丧失对全部票据债务人的追索权'],answer:[0,1,2],analysis:'选项D：持票人不能出示拒绝证明、退票理由书的，丧失对其前手的追索权，但承兑人或者付款人仍应当对持票人承担责任。'},
-  {year:2024,type:'multi',text:'下列哪些属于生活服务？（　）',options:['餐饮住宿','教育','旅游','家政服务'],answer:[0,1,2,3],analysis:'生活服务业包括餐饮业、旅店业、教育业、旅游业、家政服务业等服务。'},
-  {year:2024,type:'multi',text:'下列哪些可以简易计税？（　）',options:['装卸搬运','仓储服务','文化体育','餐饮服务'],answer:[0,1,2],analysis:'装卸搬运、仓储服务、文化体育服务可以选择简易计税方法。餐饮服务一般适用一般计税方法。'},
-  {year:2023,type:'multi',text:'根据支付结算法律制度的规定，下列选项所述票据丢失后，可以挂失止付的有（　）。',options:['未承兑的商业汇票','转账支票','现金支票','填明"现金"字样的银行汇票'],answer:[1,2,3],analysis:'可以挂失止付的票据包括：已承兑的商业汇票、支票、填明"现金"字样和代理付款人的银行汇票、填明"现金"字样的银行本票。未承兑的商业汇票不能挂失止付。'},
-  {year:2023,type:'multi',text:'根据支付结算法律制度的规定，下列各项中，属于商业汇票持票人向银行办理贴现必须具备的条件有（　）。',options:['票据未到期','持票人与出票人或者直接前手之间具有真实的商品交易关系','持票人是在银行开立有存款账户的企业法人或者其他组织','票据未记载"不得转让"事项'],answer:[0,1,2,3],analysis:'商业汇票的持票人向银行办理贴现必须具备的条件有：（1）票据未到期；（2）票据未记载"不得转让"事项；（3）持票人是在银行开立存款账户的企业法人以及其他组织；（4）持票人与出票人或者直接前手之间具有真实的商品交易关系。'},
-  {year:2022,type:'multi',text:'超额累进税率适用的情形有（　）。',options:['工资薪金所得','个体工商户生产经营所得','利息股息红利所得','财产转让所得'],answer:[0,1],analysis:'工资薪金所得适用超额累进税率（3%-45%）；个体工商户生产经营所得适用超额累进税率（5%-35%）；利息股息红利所得和财产转让所得适用比例税率20%。'},
-  {year:2022,type:'multi',text:'下列哪些是企业所得税一次性收入？（　）',options:['股息','红利','特许权使用费收入','租金'],answer:[0,1],analysis:'股息、红利等权益性投资收益属于企业所得税一次性收入。特许权使用费收入和租金收入属于分期确认的收入。'},
-  {year:2021,type:'multi',text:'根据增值税法律制度的规定，下列各项中，免征增值税的有（　）。',options:['农业生产者销售的自产农产品','避孕药品和用具','直接用于科学研究的进口仪器','个人销售自建自用住房'],answer:[0,1,2,3],analysis:'以上选项均属于免征增值税的项目。'},
-  {year:2021,type:'multi',text:'根据劳动合同法律制度的规定，下列各项中，用人单位不得解除劳动合同的情形有（　）。',options:['劳动者患病在规定的医疗期内','女职工在孕期、产期、哺乳期','劳动者在本单位连续工作满10年且距法定退休年龄不足5年','劳动者因工负伤并被确认丧失劳动能力'],answer:[0,1,3],analysis:'选项C应为在本单位连续工作满15年且距法定退休年龄不足5年。选项A、B、D均属于不得解除劳动合同的情形。'},
-  {year:2020,type:'multi',text:'根据支付结算法律制度的规定，下列关于办理汇兑业务的表述中，正确的有（　）。',options:['汇款回单可以作为该笔汇款已转入收账人账户的证明','汇兑凭证记载的汇款人、收款人在银行开立存款账户的，必须记载其账号','汇款回单是汇出银行受理汇款的依据','收款通知是银行将款项确已收入收款人账户的凭据'],answer:[1,2,3],analysis:'汇款回单是汇出银行受理汇款的依据，不能作为该笔汇款已转入收账人账户的证明。收款通知才是款项已入账户的凭据。'},
-  {year:2020,type:'multi',text:'根据社会保险法律制度的规定，下列各项中，属于职工基本养老保险缴费主体的有（　）。',options:['用人单位','职工个人','政府补贴','用人单位和职工共同缴费'],answer:[0,1],analysis:'职工基本养老保险由用人单位和职工共同缴纳基本养老保险费。政府补贴属于基金来源但不属于缴费主体。'},
-  {year:2024,type:'judge',text:'处于失业期仍然享受基本医疗保险。（　）',options:['正确','错误'],answer:[0],analysis:'失业人员在领取失业保险金期间，参加职工基本医疗保险，享受基本医疗保险待遇。'},
-  {year:2024,type:'judge',text:'把房子无偿赠予父亲，赠予方和接受方都不缴纳个人所得税。（　）',options:['正确','错误'],answer:[0],analysis:'房屋产权所有人将房屋产权无偿赠与配偶、父母、子女等直系亲属的，对当事双方不征收个人所得税。'},
-  {year:2024,type:'judge',text:'对于逾期未缴纳的税有意见的，应该先不用缴税，直接复议。（　）',options:['正确','错误'],answer:[1],analysis:'纳税人、扣缴义务人、纳税担保人同税务机关在纳税上发生争议时，必须先依照税务机关的纳税决定缴纳或者解缴税款及滞纳金，然后可以依法申请行政复议。'},
-  {year:2023,type:'judge',text:'票据的出票日期必须使用中文大写。（　）',options:['正确','错误'],answer:[0],analysis:'票据的出票日期必须使用中文大写。使用小写填写的，银行不予受理。'},
-  {year:2023,type:'judge',text:'一般存款账户可以办理现金缴存和现金支取。（　）',options:['正确','错误'],answer:[1],analysis:'一般存款账户可以办理现金缴存，但不得办理现金支取。'},
-  {year:2023,type:'judge',text:'背书人在汇票上记载"不得转让"字样，其后手再背书转让的，原背书人对后手的被背书人不承担保证责任。（　）',options:['正确','错误'],answer:[0],analysis:'背书人在汇票上记载"不得转让"字样，其后手再背书转让的，原背书人对后手的被背书人不承担保证责任，但不影响出票人、承兑人以及原背书人之后手背书人的票据责任。'},
-  {year:2022,type:'judge',text:'用人单位自用工之日起即与劳动者建立劳动关系。（　）',options:['正确','错误'],answer:[0],analysis:'用人单位自用工之日起即与劳动者建立劳动关系。'},
-  {year:2022,type:'judge',text:'劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。（　）',options:['正确','错误'],answer:[0],analysis:'劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。'},
-  {year:2021,type:'judge',text:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。（　）',options:['正确','错误'],answer:[0],analysis:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。'},
-  {year:2021,type:'judge',text:'商业承兑汇票的付款人收到出票人的付款通知后，应当于当日通知银行付款。（　）',options:['正确','错误'],answer:[1],analysis:'商业承兑汇票的付款人收到开户银行的付款通知，应当在当日通知银行付款。付款人在接到通知日的次日起3日内（遇法定休假日顺延）未通知银行付款的，视同付款人承诺付款。'},
-  {year:2020,type:'judge',text:'劳动合同被确认为无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。（　）',options:['正确','错误'],answer:[0],analysis:'劳动合同被确认为无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。'},
-  {year:2020,type:'judge',text:'行政复议期间被申请人可以自行向申请人收集证据。（　）',options:['正确','错误'],answer:[1],analysis:'行政复议期间被申请人不得自行向申请人和其他有关组织或者个人收集证据。'},
-  {year:2024,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年12月发生如下业务：（1）销售货物取得含税销售额113000元；（2）购进原材料取得增值税专用发票注明价款60000元，增值税7800元；（3）支付运输费用取得增值税专用发票注明运费10000元，增值税900元。已知增值税税率为13%，运输服务税率为9%。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为13000元','业务（2）的进项税额为7800元','业务（3）的进项税额为900元','甲公司当月应纳增值税为4300元'],answer:[0,1,2,3],analysis:'销项税额=113000÷(1+13%)×13%=13000元；进项税额=7800+900=8700元；应纳增值税=13000-8700=4300元。'},
-  {year:2023,type:'indefinite',text:'甲公司2023年工资总额为1000万元，发生如下与个人所得税相关的业务：（1）支付员工张某工资15000元/月，专项扣除3000元/月，专项附加扣除2000元/月；（2）支付员工李某劳务报酬10000元；（3）支付员工王某稿酬8000元。根据上述资料，下列说法正确的有（　）。',options:['张某当月预扣预缴个人所得税为300元','李某当月预扣预缴劳务报酬个人所得税为1600元','王某当月预扣预缴稿酬所得个人所得税为896元','稿酬所得的收入额按照收入减除20%费用后再减按70%计算'],answer:[1,2,3],analysis:'张某：应纳税所得额=15000-5000-3000-2000=5000元，预扣预缴=5000×10%-210=290元（非300元）；李某：劳务报酬10000元，预扣预缴=10000×(1-20%)×20%=1600元；王某：稿酬8000元，预扣预缴=8000×(1-20%)×70%×20%=896元。稿酬所得收入额=收入×(1-20%)×70%。'},
-  {year:2022,type:'indefinite',text:'甲公司为增值税一般纳税人，2022年发生如下与房产相关的业务：（1）公司自用厂房原值500万元，已提折旧200万元；（2）出租商铺一间，年租金收入24万元；（3）将一栋原值300万元的办公楼无偿赠与关联企业。已知当地规定的房产税扣除比例为30%，从租计征税率为12%，从价计征税率为1.2%。根据上述资料，下列说法正确的有（　）。',options:['自用厂房应缴纳房产税4.2万元','出租商铺应缴纳房产税2.88万元','无偿赠与办公楼不缴纳房产税','甲公司2022年应缴纳房产税合计7.08万元'],answer:[0,1,3],analysis:'自用厂房房产税=500×(1-30%)×1.2%=4.2万元；出租商铺房产税=24×12%=2.88万元；无偿赠与办公楼由受赠方缴纳房产税，甲公司不缴；合计=4.2+2.88=7.08万元。'},
-  {year:2021,type:'indefinite',text:'张某为中国公民，2021年取得如下收入：（1）每月工资20000元，每月专项扣除4000元，专项附加扣除3000元；（2）3月取得特许权使用费收入50000元；（3）6月取得利息收入2000元（国债利息）。根据上述资料，下列说法正确的有（　）。',options:['张某全年工资预扣预缴个人所得税为9480元','特许权使用费预扣预缴个人所得税为8000元','国债利息收入免征个人所得税','张某综合所得汇算清缴应补（退）税额为退税'],answer:[0,1,2],analysis:'全年工资应纳税所得额=(20000-5000-4000-3000)×12=96000元，预扣预缴=96000×10%-2520=7080元（注：按累计预扣法计算，此处简化）；特许权使用费预扣预缴=50000×(1-20%)×20%=8000元；国债利息免征个税。'},
-  {year:2020,type:'indefinite',text:'甲公司为增值税一般纳税人，2020年发生如下与增值税相关的业务：（1）销售货物取得不含税销售额200000元，适用税率13%；（2）购进原材料取得增值税专用发票注明价款100000元，增值税13000元；（3）支付广告费取得增值税专用发票注明金额20000元，增值税1200元；（4）将自产货物用于职工福利，该批货物成本为30000元，不含税市场售价为50000元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为26000元','业务（4）的销项税额为6500元','甲公司当月可抵扣的进项税额为14200元','甲公司当月应纳增值税为18300元'],answer:[0,1,2,3],analysis:'销项税额=200000×13%+50000×13%=26000+6500=32500元；进项税额=13000+1200=14200元；应纳增值税=32500-14200=18300元。将自产货物用于职工福利视同销售，需计算销项税额。'},
-  {year:2019,type:'single',text:'根据个人所得税法律制度的规定，下列各项中，属于工资、薪金所得的是（　）。',options:['年终加薪','特许权使用费所得','稿酬所得','劳务报酬所得'],answer:[0],analysis:'工资、薪金所得包括工资、薪金、奖金、年终加薪、劳动分红、津贴、补贴等。'},
-  {year:2019,type:'single',text:'根据增值税法律制度的规定，下列各项中，免征增值税的是（　）。',options:['商店销售糖果','农民销售自产粮食','企业销售自产冰箱','商店销售图书'],answer:[1],analysis:'农业生产者销售的自产农产品免征增值税。'},
-  {year:2019,type:'single',text:'根据劳动合同法律制度的规定，下列关于劳动仲裁的表述中，不正确的是（　）。',options:['劳动仲裁是劳动争议当事人向人民法院提起诉讼的必经程序','劳动争议仲裁委员会按照统筹规划、合理布局和适应实际需要的原则设立','劳动争议仲裁委员会不按行政区划层层设立','劳动争议仲裁委员会组成人员应当是单数'],answer:[0],analysis:'劳动仲裁并非向法院提起诉讼的必经程序，部分劳动争议可以直接向法院起诉。'},
-  {year:2019,type:'single',text:'根据支付结算法律制度的规定，下列关于支票的表述中，正确的是（　）。',options:['支票的付款人为银行以外的法人','支票的出票人可以签发空头支票','支票限于见票即付，不得另行记载付款日期','支票的提示付款期限为出票日起10日'],answer:[2],analysis:'支票限于见票即付，不得另行记载付款日期，另行记载付款日期的，该记载无效。'},
-  {year:2019,type:'single',text:'根据企业所得税法律制度的规定，下列各项中，属于免税收入的是（　）。',options:['财政拨款','国债利息收入','依法收取的行政事业性收费','接受捐赠收入'],answer:[1],analysis:'国债利息收入属于免税收入。财政拨款和依法收取的行政事业性收费属于不征税收入。接受捐赠收入属于应税收入。'},
-  {year:2019,type:'single',text:'根据劳动合同法律制度的规定，下列不属于劳动合同约定条款的是（　）。',options:['试用期条款','保守商业秘密条款','社会保险条款','培训条款'],answer:[2],analysis:'社会保险属于劳动合同的法定条款（必备条款），而非约定条款。'},
-  {year:2018,type:'single',text:'根据支付结算法律制度的规定，下列关于银行本票的表述中，正确的是（　）。',options:['银行本票的付款人名称不属于必须记载事项','银行本票的提示付款期限自出票日起最长不得超过2个月','银行本票可以用于转账，但不得支取现金','银行本票的出票人为银行'],answer:[0],analysis:'银行本票的出票人和付款人均为出票银行，因此付款人名称不属于必须记载事项。'},
-  {year:2018,type:'single',text:'根据劳动合同法律制度的规定，下列属于劳动合同必备条款的是（　）。',options:['试用期','服务期','劳动报酬','竞业限制'],answer:[2],analysis:'劳动报酬属于劳动合同的必备条款。试用期、服务期、竞业限制属于约定条款。'},
-  {year:2018,type:'single',text:'根据增值税法律制度的规定，一般纳税人发生的下列情形中，其进项税额准予抵扣的是（　）。',options:['购进的餐饮服务','购进的贷款服务','购进的旅客运输服务','购进的居民日常服务'],answer:[2],analysis:'购进的旅客运输服务准予抵扣进项税额。购进的餐饮服务、贷款服务、居民日常服务不得抵扣。'},
-  {year:2017,type:'single',text:'根据支付结算法律制度的规定，下列关于银行汇票的表述中，正确的是（　）。',options:['银行汇票的提示付款期限自出票日起2个月','申请人或者收款人为单位的，可以签发现金银行汇票','银行汇票的实际结算金额不得更改','银行汇票的付款人为出票银行'],answer:[2],analysis:'银行汇票的实际结算金额不得更改，更改实际结算金额的银行汇票无效。'},
-  {year:2017,type:'single',text:'根据增值税法律制度的规定，下列行为中，应视同销售货物征收增值税的是（　）。',options:['将外购货物用于集体福利','将自产货物用于个人消费','将外购货物用于免税项目','将外购货物用于简易计税项目'],answer:[1],analysis:'将自产、委托加工的货物用于个人消费、集体福利视同销售。将外购货物用于集体福利、免税项目、简易计税项目不视同销售，作进项税额转出处理。'},
-  {year:2017,type:'single',text:'根据个人所得税法律制度的规定，下列所得中，应缴纳个人所得税的是（　）。',options:['省级人民政府颁发的科学奖金','国债利息','按国家统一规定发放的补贴','稿酬所得'],answer:[3],analysis:'省级人民政府颁发的科学奖金、国债利息、按国家统一规定发放的补贴均免征个人所得税。稿酬所得应缴纳个人所得税。'},
-  {year:2016,type:'single',text:'根据支付结算法律制度的规定，下列关于汇兑的表述中，不正确的是（　）。',options:['汇兑分为信汇和电汇两种','汇款人对汇出银行尚未汇出的款项可以申请撤销','汇款回单可以作为该笔汇款已转入收款人账户的证明','收款通知是银行将款项确已收入收款人账户的凭据'],answer:[2],analysis:'汇款回单是汇出银行受理汇款的依据，不能作为该笔汇款已转入收款人账户的证明。收款通知才是款项已入账户的凭据。'},
-  {year:2016,type:'single',text:'根据增值税法律制度的规定，下列各项中，适用13%税率的是（　）。',options:['销售不动产','销售汽车','销售粮食','销售金融服务'],answer:[2],analysis:'粮食属于农产品，适用低税率（2019年前为11%，2019年后为9%）。本题中销售粮食适用低税率。'},
-  {year:2016,type:'single',text:'根据劳动合同法律制度的规定，下列关于经济补偿的表述中，不正确的是（　）。',options:['经济补偿金是用人单位解除劳动合同时给予劳动者的经济补偿','经济补偿金的计算公式为：经济补偿金=工作年限×月工资','劳动者在用人单位工作不满6个月的，不支付经济补偿金','月工资按照劳动者解除合同前12个月的平均工资计算'],answer:[2],analysis:'劳动者在用人单位工作不满6个月的，向劳动者支付半个月工资的经济补偿。'},
-  {year:2015,type:'single',text:'根据支付结算法律制度的规定，下列票据当事人中，属于票据的基本当事人的是（　）。',options:['承兑人','保证人','背书人','出票人'],answer:[3],analysis:'票据的基本当事人包括出票人、付款人和收款人。承兑人、保证人、背书人属于非基本当事人。'},
-  {year:2015,type:'single',text:'根据增值税法律制度的规定，下列各项中，应缴纳增值税的是（　）。',options:['个人销售自建自用住房','个人转让著作权','企业销售自产货物','残疾人组织进口物品'],answer:[2],analysis:'个人销售自建自用住房、个人转让著作权、残疾人组织直接进口供残疾人专用的物品均免征增值税。企业销售自产货物应缴纳增值税。'},
-  {year:2015,type:'single',text:'根据企业所得税法律制度的规定，下列关于固定资产计税基础的表述中，正确的是（　）。',options:['自行建造的固定资产以竣工结算前发生的支出为计税基础','外购的固定资产以购买价款为计税基础','融资租入的固定资产以租赁合同约定的付款总额为计税基础','盘盈的固定资产以同类固定资产的重置完全价值为计税基础'],answer:[3],analysis:'盘盈的固定资产以同类固定资产的重置完全价值为计税基础。'},
-  {year:2019,type:'multi',text:'根据劳动合同法律制度的规定，下列关于试用期的表述中，正确的有（　）。',options:['劳动合同期限1年以上不满3年的，试用期不得超过2个月','同一用人单位与同一劳动者只能约定一次试用期','以完成一定工作任务为期限的劳动合同不得约定试用期','劳动合同仅约定试用期的，试用期不成立'],answer:[0,1,2,3],analysis:'以上选项均正确。劳动合同期限1年以上不满3年的，试用期不得超过2个月；同一用人单位与同一劳动者只能约定一次试用期；以完成一定工作任务为期限的劳动合同不得约定试用期；劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。'},
-  {year:2018,type:'multi',text:'根据增值税法律制度的规定，下列各项中，免征增值税的有（　）。',options:['农业机耕服务','医疗机构提供的医疗服务','学生勤工俭学提供的劳务','残疾人个人提供的加工服务'],answer:[0,1,2,3],analysis:'以上选项均属于免征增值税的项目。'},
-  {year:2017,type:'multi',text:'根据企业所得税法律制度的规定，下列各项中，在计算应纳税所得额时不得扣除的有（　）。',options:['向投资者支付的股息','税收滞纳金','赞助支出','按规定缴纳的财产保险费'],answer:[0,1,2],analysis:'向投资者支付的股息、税收滞纳金、赞助支出不得在税前扣除。按规定缴纳的财产保险费可以扣除。'},
-  {year:2016,type:'multi',text:'根据支付结算法律制度的规定，下列关于票据权利时效的表述中，正确的有（　）。',options:['持票人对商业汇票的出票人的权利自到期日起2年','持票人对支票出票人的权利自出票日起6个月','持票人对前手的追索权自被拒绝承兑或被拒绝付款之日起6个月','持票人对前手的再追索权自清偿日或被提起诉讼之日起3个月'],answer:[0,1,2,3],analysis:'以上选项均正确。持票人对商业汇票出票人的权利自到期日起2年；对支票出票人的权利自出票日起6个月；对前手的追索权自被拒绝之日起6个月；对前手的再追索权自清偿日起3个月。'},
-  {year:2015,type:'multi',text:'根据劳动合同法律制度的规定，下列各项中，用人单位可随时通知劳动者解除劳动合同的有（　）。',options:['劳动者在试用期间被证明不符合录用条件','劳动者严重违反用人单位规章制度','劳动者同时与其他用人单位建立劳动关系','劳动者被依法追究刑事责任'],answer:[0,1,2,3],analysis:'以上选项均属于用人单位可随时通知劳动者解除劳动合同的情形。'},
-  {year:2019,type:'judge',text:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。（　）',options:['正确','错误'],answer:[0],analysis:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。'},
-  {year:2018,type:'judge',text:'用人单位与劳动者在用工前订立劳动合同的，劳动关系自劳动合同订立之日起建立。（　）',options:['正确','错误'],answer:[1],analysis:'用人单位与劳动者在用工前订立劳动合同的，劳动关系自用工之日起建立，而非劳动合同订立之日。'},
-  {year:2017,type:'judge',text:'行政复议机关受理行政复议申请，可以向申请人收取适当的费用。（　）',options:['正确','错误'],answer:[1],analysis:'行政复议机关受理行政复议申请，不得向申请人收取任何费用。'},
-  {year:2016,type:'judge',text:'银行承兑汇票的出票人于汇票到期日未能足额交存票款时，承兑银行除凭票向持票人无条件付款外，对出票人尚未支付的汇票金额按照每天万分之五计收利息。（　）',options:['正确','错误'],answer:[0],analysis:'银行承兑汇票的出票人于汇票到期日未能足额交存票款时，承兑银行除凭票向持票人无条件付款外，对出票人尚未支付的汇票金额按照每天万分之五计收利息。'},
-  {year:2015,type:'judge',text:'票据丧失后，失票人可以挂失止付、公示催告和普通诉讼三种方式补救。（　）',options:['正确','错误'],answer:[0],analysis:'票据丧失后，失票人可以采取挂失止付、公示催告和普通诉讼三种方式进行补救。'},
-  {year:2019,type:'indefinite',text:'甲公司为增值税一般纳税人，2019年发生如下与增值税相关的业务：（1）销售货物取得含税销售额226000元，适用税率13%；（2）购进原材料取得增值税专用发票注明价款100000元，增值税13000元；（3）支付运输费用取得增值税专用发票注明运费5000元，增值税450元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为26000元','业务（2）的进项税额为13000元','业务（3）的进项税额为450元','甲公司当月应纳增值税为12550元'],answer:[0,1,2,3],analysis:'销项税额=226000÷(1+13%)×13%=26000元；进项税额=13000+450=13450元；应纳增值税=26000-13450=12550元。'},
-  {year:2018,type:'indefinite',text:'甲公司为增值税一般纳税人，2018年发生如下与增值税相关的业务：（1）销售货物取得不含税销售额300000元，适用税率17%；（2）购进原材料取得增值税专用发票注明价款150000元，增值税25500元；（3）支付广告费20000元，增值税1200元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为51000元','业务（2）的进项税额为25500元','甲公司当月可抵扣进项税额为26700元','甲公司当月应纳增值税为24300元'],answer:[0,1,2,3],analysis:'销项税额=300000×17%=51000元；进项税额=25500+1200=26700元；应纳增值税=51000-26700=24300元。'},
-  {year:2017,type:'indefinite',text:'甲公司2017年发生如下与房产相关的业务：（1）公司自用厂房原值400万元，当地规定的房产税扣除比例为30%；（2）出租商铺一间，年租金收入18万元；（3）将一栋原值200万元的办公楼无偿赠与关联企业。已知从租计征税率为12%，从价计征税率为1.2%。根据上述资料，下列说法正确的有（　）。',options:['自用厂房应缴纳房产税3.36万元','出租商铺应缴纳房产税2.16万元','无偿赠与办公楼甲公司不缴纳房产税','甲公司2017年应缴纳房产税合计5.52万元'],answer:[0,1,2,3],analysis:'自用厂房房产税=400×(1-30%)×1.2%=3.36万元；出租商铺房产税=18×12%=2.16万元；无偿赠与办公楼由受赠方缴纳房产税；合计=3.36+2.16=5.52万元。'},
-  {year:2016,type:'indefinite',text:'甲公司为增值税一般纳税人，2016年发生如下与增值税相关的业务：（1）销售货物取得不含税销售额500000元，适用税率17%；（2）购进原材料取得增值税专用发票注明价款200000元，增值税34000元；（3）将自产货物用于职工福利，该批货物成本为40000元，不含税市场售价为60000元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为85000元','业务（3）的销项税额为10200元','甲公司当月可抵扣的进项税额为34000元','甲公司当月应纳增值税为61200元'],answer:[0,1,2,3],analysis:'销项税额=500000×17%+60000×17%=85000+10200=95200元；进项税额=34000元；应纳增值税=95200-34000=61200元。'},
-  {year:2015,type:'indefinite',text:'甲公司为增值税一般纳税人，2015年发生如下与增值税相关的业务：（1）销售货物取得不含税销售额400000元，适用税率17%；（2）购进原材料取得增值税专用发票注明价款250000元，增值税42500元；（3）支付运输费用取得增值税专用发票注明运费10000元，增值税1100元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为68000元','业务（2）的进项税额为42500元','甲公司当月可抵扣的进项税额为43600元','甲公司当月应纳增值税为24400元'],answer:[0,1,2,3],analysis:'销项税额=400000×17%=68000元；进项税额=42500+1100=43600元；应纳增值税=68000-43600=24400元。'},
   {year:2025,type:'single',text:'下列不属于资源税征税范围的是（　）。',options:['柴油','海盐','金属矿产','天然气'],answer:[0],analysis:'柴油属于成品油，属于消费税征税范围，不属于资源税征税范围。'},
-  {year:2025,type:'single',text:'根据个人所得税法律制度的规定，在中国境内无住所的下列外籍个人中，属于中国个人所得税居民个人的是（　）。',options:['亨利9月1日入境，12月10日出境','查理1月20日入境，7月10日出境','乔治3月15日入境，10月25日出境','约翰上年10月1日入境，本年5月5日出境'],answer:[2],analysis:'居民个人需在一个纳税年度内在中国境内居住满183天。乔治从3月15日到10月25日超过183天，属于居民个人。'},
-  {year:2025,type:'single',text:'下列税种中，由海关负责征收和管理的是（　）。',options:['契税','船舶吨税','车船税','车辆购置税'],answer:[1],analysis:'船舶吨税由海关负责征收。契税、车船税、车辆购置税由税务机关征收。'},
-  {year:2025,type:'single',text:'根据企业所得税法律制度的规定，下列各项中，不可以在税前扣除的是（　）。',options:['预缴的企业所得税','消费税','资源税','土地增值税'],answer:[0],analysis:'允许抵扣的增值税和企业所得税不可以在税前扣除。消费税、资源税、土地增值税可以在税前扣除。'},
-  {year:2025,type:'single',text:'下列自然人中，属于限制民事行为能力人的是（　）。',options:['王某，32周岁，不能完全辨认自己的行为','赵某，17周岁，以自己的劳动收入为主要生活来源','钱某，27周岁，完全不能辨认自己的行为','李某，7周岁，系小学在校学生'],answer:[0],analysis:'不能完全辨认自己行为的成年人为限制民事行为能力人；17周岁以劳动收入为主要生活来源的视为完全民事行为能力人；完全不能辨认自己行为的为无民事行为能力人；不满8周岁为无民事行为能力人。'},
+  {year:2025,type:'single',text:'下列税种中，由海关负责征收和管理的是（　）。',options:['契税','船舶吨税','车船税','车辆购置税'],answer:[1],analysis:'船舶吨税由海关负责征收。'},
+  {year:2025,type:'single',text:'根据企业所得税法律制度的规定，下列各项中，不可以在税前扣除的是（　）。',options:['预缴的企业所得税','消费税','资源税','土地增值税'],answer:[0],analysis:'允许抵扣的增值税和企业所得税不可以在税前扣除。'},
   {year:2025,type:'single',text:'根据劳动合同法律制度的规定，一般情况下劳动仲裁的时效期间为（　）。',options:['1年','6个月','2年','3年'],answer:[0],analysis:'劳动争议申请仲裁的时效期间为1年。'},
-  {year:2025,type:'single',text:'根据企业所得税法律制度的规定，企业从事下列项目的所得，免征企业所得税的是（　）。',options:['远洋捕捞','花卉种植','茶叶种植','海水养殖'],answer:[0],analysis:'远洋捕捞免征企业所得税；花卉种植、茶叶种植、海水养殖减半征收企业所得税。'},
   {year:2025,type:'single',text:'中国居民张某取得劳务报酬40000元。已知劳务报酬所得每次收入4000元以上的，减除费用按20%计算；预扣预缴应纳税所得额超过20000元至50000元的部分，预扣率为30%，速算扣除数为2000。张某取得劳务报酬所得应预扣预缴个人所得税税额为（　）元。',options:['400','9600','2400','7600'],answer:[3],analysis:'应预扣预缴税额=40000×(1-20%)×30%-2000=7600(元)。'},
-  {year:2025,type:'single',text:'林某持有一张P银行的借记卡，2024年4月1日林某在P银行ATM上查询该卡活期存款余额为6万元，林某当日可使用该卡在ATM上取款限额为（　）万元。',options:['1','2','3','6'],answer:[1],analysis:'借记卡持卡人在自动柜员机取款的交易上限每卡每日累计不得超过2万元。'},
-  {year:2025,type:'multi',text:'根据增值税法律制度的规定，一般纳税人提供的下列服务中，可以选择简易计税方式的有（　）。',options:['收派服务','仓储服务','公共交通运输服务','电影放映服务'],answer:[0,1,2,3],analysis:'公共交通运输服务、电影放映服务、仓储服务、装卸搬运服务、收派服务和文化体育服务均可以选择简易计税方法。'},
-  {year:2025,type:'multi',text:'下列选项中，属于特别法人的有（　）。',options:['农村集体经济组织法人','机关法人','捐助法人','基层群众性自治组织法人'],answer:[0,1,3],analysis:'特别法人包括机关法人、农村集体经济组织法人、城镇农村的合作经济组织法人、基层群众性自治组织法人。捐助法人属于非营利法人。'},
-  {year:2025,type:'multi',text:'下列选项中，由海关负责征收的有（　）。',options:['船舶吨税','车船税','车辆购置税','关税'],answer:[0,3],analysis:'海关负责征收关税、船舶吨税及进口环节增值税、消费税的代征。车船税、车辆购置税由税务机关征收。'},
-  {year:2025,type:'multi',text:'根据企业所得税法律制度的规定，下列各项中，在计算应纳税所得额时不得扣除的有（　）。',options:['企业内营业机构之间支付的租金','企业所得税税款','企业参加雇主责任险支付的保险费','未实际发生的支出'],answer:[0,1,3],analysis:'企业内营业机构之间支付的租金和特许权使用费不得扣除；企业所得税税款不得扣除；参加雇主责任险可以扣除；未实际发生的支出不得扣除。'},
-  {year:2025,type:'judge',text:'资管产品运营过程中发生的增值税应税行为，以资管产品管理人为增值税纳税人，按照现行规定缴纳增值税。（　）',options:['正确','错误'],answer:[0],analysis:'资管产品运营过程中发生的增值税应税行为，以资管产品管理人为增值税纳税人。'},
-  {year:2025,type:'judge',text:'戏剧演员化妆用的上妆油，需要缴纳消费税。（　）',options:['正确','错误'],answer:[1],analysis:'舞台、戏剧、影视演员化妆用的油彩、上妆油、卸妆油，不属于消费税征税范围，不缴纳消费税。'},
+  {year:2024,type:'single',text:'根据关税法律制度的规定，对原产于与我国签订含有关税优惠条款的区域性贸易协定的国家或者地区的进口货物，适用的税率是（　）。',options:['最惠国税率','协定税率','特惠税率','普通税率'],answer:[1],analysis:'对原产于与我国签订含有关税优惠条款的区域性贸易协定的国家或者地区的进口货物，适用协定税率。'},
+  {year:2024,type:'single',text:'2023年度某小型企业财务资料显示会计利润为370万元，另有经税务机关核定的2022年亏损为70万元。假设无其他纳税调整事项，该企业2023年应纳税额为（　）万元。',options:['77.5','72.5','75','70'],answer:[2],analysis:'应纳税所得额=370-70=300(万元)，应纳税额=300×25%=75(万元)。'},
+  {year:2023,type:'single',text:'下列自然人中，属于限制民事行为能力人的是（　）。',options:['李某，20周岁，系大学在校学生','张某，17周岁，依靠工资收入作为自己全部生活来源','刘某，9周岁，系小学三年级学生','王某，6周岁，经常登台演出并有一定收入'],answer:[2],analysis:'8周岁以上不满18周岁的未成年人为限制民事行为能力人。'},
+  {year:2023,type:'single',text:'根据《会计档案管理办法》的规定，下列会计档案应永久保存的是（　）。',options:['记账凭证','原始凭证','会计档案保管清册','半年度财务报告'],answer:[2],analysis:'永久保存的会计档案包括：年度财务报告、会计档案销毁清册、会计档案保管清册、会计档案鉴定意见书。'},
+  {year:2022,type:'single',text:'根据支付结算法律制度的规定，下列关于票据背书的表述中，正确的是（　）。',options:['以背书转让的票据，背书应当连续','背书时附有条件的，背书无效','委托收款背书的被背书人可再以背书转让票据权利','票据上第一背书人为出票人'],answer:[0],analysis:'选项B：背书附有条件的，所附条件不具有票据上的效力，背书有效；选项C：委托收款背书的被背书人不得再以背书转让票据权利；选项D：票据上的第一背书人为票据收款人。'},
+  {year:2021,type:'single',text:'根据个人所得税法律制度的规定，下列各项中，属于综合所得的是（　）。',options:['利息股息红利所得','财产租赁所得','经营所得','劳务报酬所得'],answer:[3],analysis:'综合所得包括工资薪金所得、劳务报酬所得、稿酬所得、特许权使用费所得。'},
+  {year:2020,type:'single',text:'根据企业所得税法律制度的规定，下列各项中，属于不征税收入的是（　）。',options:['国债利息收入','财政拨款','符合条件的居民企业之间的股息收入','技术转让所得'],answer:[1],analysis:'不征税收入包括财政拨款、依法收取并纳入财政管理的行政事业性收费和政府性基金。'},
+  {year:2019,type:'single',text:'根据增值税法律制度的规定，下列各项中，免征增值税的是（　）。',options:['商店销售糖果','农民销售自产粮食','企业销售自产冰箱','商店销售图书'],answer:[1],analysis:'农业生产者销售的自产农产品免征增值税。'},
+  {year:2018,type:'single',text:'根据劳动合同法律制度的规定，下列属于劳动合同必备条款的是（　）。',options:['试用期','服务期','劳动报酬','竞业限制'],answer:[2],analysis:'劳动报酬属于劳动合同的必备条款。试用期、服务期、竞业限制属于约定条款。'},
+  {year:2017,type:'single',text:'根据增值税法律制度的规定，下列行为中，应视同销售货物征收增值税的是（　）。',options:['将外购货物用于集体福利','将自产货物用于个人消费','将外购货物用于免税项目','将外购货物用于简易计税项目'],answer:[1],analysis:'将自产、委托加工的货物用于个人消费、集体福利视同销售。将外购货物用于集体福利、免税项目不视同销售。'},
+  {year:2016,type:'single',text:'根据劳动合同法律制度的规定，下列关于经济补偿的表述中，不正确的是（　）。',options:['经济补偿金是用人单位解除劳动合同时给予劳动者的经济补偿','经济补偿金的计算公式为：经济补偿金=工作年限×月工资','劳动者在用人单位工作不满6个月的，不支付经济补偿金','月工资按照劳动者解除合同前12个月的平均工资计算'],answer:[2],analysis:'劳动者在用人单位工作不满6个月的，向劳动者支付半个月工资的经济补偿。'},
+  {year:2015,type:'single',text:'根据支付结算法律制度的规定，下列票据当事人中，属于票据的基本当事人的是（　）。',options:['承兑人','保证人','背书人','出票人'],answer:[3],analysis:'票据的基本当事人包括出票人、付款人和收款人。'},
+  {year:2024,type:'multi',text:'根据支付结算法律制度的规定，关于票据追索权行使的下列表述中，正确的有（　）。',options:['持票人收到拒绝证明后，应当将被拒绝事由书面通知其前手','汇票被拒绝承兑的，持票人可以行使追索权','持票人可以对出票人、背书人、承兑人和保证人中的任何一人、数人或全体行使追索权','持票人不能出示拒绝证明或退票理由书的，丧失对全部票据债务人的追索权'],answer:[0,1,2],analysis:'选项D：持票人不能出示拒绝证明的，丧失对其前手的追索权，但承兑人或者付款人仍应当对持票人承担责任。'},
+  {year:2023,type:'multi',text:'根据支付结算法律制度的规定，下列选项所述票据丢失后，可以挂失止付的有（　）。',options:['未承兑的商业汇票','转账支票','现金支票','填明"现金"字样的银行汇票'],answer:[1,2,3],analysis:'可以挂失止付的票据包括：已承兑的商业汇票、支票、填明"现金"字样和代理付款人的银行汇票、填明"现金"字样的银行本票。未承兑的商业汇票不能挂失止付。'},
+  {year:2022,type:'multi',text:'超额累进税率适用的情形有（　）。',options:['工资薪金所得','个体工商户生产经营所得','利息股息红利所得','财产转让所得'],answer:[0,1],analysis:'工资薪金所得适用超额累进税率（3%-45%）；个体工商户生产经营所得适用超额累进税率（5%-35%）；利息股息红利所得和财产转让所得适用比例税率20%。'},
+  {year:2021,type:'multi',text:'根据增值税法律制度的规定，下列各项中，免征增值税的有（　）。',options:['农业生产者销售的自产农产品','避孕药品和用具','直接用于科学研究的进口仪器','个人销售自建自用住房'],answer:[0,1,2,3],analysis:'以上选项均属于免征增值税的项目。'},
+  {year:2020,type:'multi',text:'根据社会保险法律制度的规定，下列各项中，属于职工基本养老保险缴费主体的有（　）。',options:['用人单位','职工个人','政府补贴','用人单位和职工共同缴费'],answer:[0,1],analysis:'职工基本养老保险由用人单位和职工共同缴纳基本养老保险费。'},
+  {year:2024,type:'judge',text:'处于失业期仍然享受基本医疗保险。（　）',options:['正确','错误'],answer:[0],analysis:'失业人员在领取失业保险金期间，参加职工基本医疗保险，享受基本医疗保险待遇。'},
+  {year:2024,type:'judge',text:'对于逾期未缴纳的税有意见的，应该先不用缴税，直接复议。（　）',options:['正确','错误'],answer:[1],analysis:'纳税人同税务机关在纳税上发生争议时，必须先依照税务机关的纳税决定缴纳或者解缴税款及滞纳金，然后可以依法申请行政复议。'},
+  {year:2023,type:'judge',text:'票据的出票日期必须使用中文大写。（　）',options:['正确','错误'],answer:[0],analysis:'票据的出票日期必须使用中文大写。使用小写填写的，银行不予受理。'},
+  {year:2022,type:'judge',text:'用人单位自用工之日起即与劳动者建立劳动关系。（　）',options:['正确','错误'],answer:[0],analysis:'用人单位自用工之日起即与劳动者建立劳动关系。'},
+  {year:2021,type:'judge',text:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。（　）',options:['正确','错误'],answer:[0],analysis:'纳税人发生纳税义务，逾期仍不申报的，税务机关有权核定其应纳税额。'},
+  {year:2020,type:'judge',text:'劳动合同被确认为无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。（　）',options:['正确','错误'],answer:[0],analysis:'劳动合同被确认为无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。'},
   {year:2025,type:'judge',text:'行政复议机关受理行政复议申请，可以向申请人收取适当的费用。（　）',options:['正确','错误'],answer:[1],analysis:'行政复议机关受理行政复议申请，不得向申请人收取任何费用。'},
   {year:2025,type:'indefinite',text:'某外卖平台上线了"拼好饭"功能，小李通过"拼好饭"在线上H快餐店点了一份外卖，并按要求在平台上付了款。半小时后快递员将做好的饭菜送到了小李家门口。根据上述资料，下列说法正确的有（　）。',options:['小李与外卖平台签订了商品买卖合同','H快餐店在购买页面展示的价格及服务内容属于要约','小李通过"拼好饭"点餐并按要求在平台上付款构成承诺','在外卖平台上下单视为书面合同的方式，依法受到法律保护'],answer:[1,2,3],analysis:'小李与H快餐店建立餐饮服务合同关系，而非与外卖平台签订买卖合同；H快餐店展示具体价格和内容属于要约；小李点餐付款构成承诺；电子数据形式属于书面合同方式。'},
+  {year:2024,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年12月发生如下业务：（1）销售货物取得含税销售额113000元；（2）购进原材料取得增值税专用发票注明价款60000元，增值税7800元；（3）支付运输费用取得增值税专用发票注明运费10000元，增值税900元。已知增值税税率为13%，运输服务税率为9%。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为13000元','业务（2）的进项税额为7800元','业务（3）的进项税额为900元','甲公司当月应纳增值税为4300元'],answer:[0,1,2,3],analysis:'销项税额=113000÷(1+13%)×13%=13000元；进项税额=7800+900=8700元；应纳增值税=13000-8700=4300元。'},
+  {year:2023,type:'indefinite',text:'甲公司2023年工资总额为1000万元，发生如下与个人所得税相关的业务：（1）支付员工张某工资15000元/月，专项扣除3000元/月，专项附加扣除2000元/月；（2）支付员工李某劳务报酬10000元；（3）支付员工王某稿酬8000元。根据上述资料，下列说法正确的有（　）。',options:['张某当月预扣预缴个人所得税为300元','李某当月预扣预缴劳务报酬个人所得税为1600元','王某当月预扣预缴稿酬所得个人所得税为896元','稿酬所得的收入额按照收入减除20%费用后再减按70%计算'],answer:[1,2,3],analysis:'李某：劳务报酬10000元，预扣预缴=10000×(1-20%)×20%=1600元；王某：稿酬8000元，预扣预缴=8000×(1-20%)×70%×20%=896元。'},
+  {year:2022,type:'indefinite',text:'甲公司为增值税一般纳税人，2022年发生如下与房产相关的业务：（1）公司自用厂房原值500万元，已提折旧200万元；（2）出租商铺一间，年租金收入24万元；（3）将一栋原值300万元的办公楼无偿赠与关联企业。已知当地规定的房产税扣除比例为30%，从租计征税率为12%，从价计征税率为1.2%。根据上述资料，下列说法正确的有（　）。',options:['自用厂房应缴纳房产税4.2万元','出租商铺应缴纳房产税2.88万元','无偿赠与办公楼不缴纳房产税','甲公司2022年应缴纳房产税合计7.08万元'],answer:[0,1,3],analysis:'自用厂房房产税=500×(1-30%)×1.2%=4.2万元；出租商铺房产税=24×12%=2.88万元；无偿赠与办公楼由受赠方缴纳房产税；合计=4.2+2.88=7.08万元。'},
+  {year:2021,type:'indefinite',text:'张某为中国公民，2021年取得如下收入：（1）每月工资20000元，每月专项扣除4000元，专项附加扣除3000元；（2）3月取得特许权使用费收入50000元；（3）6月取得利息收入2000元（国债利息）。根据上述资料，下列说法正确的有（　）。',options:['张某全年工资预扣预缴个人所得税为9480元','特许权使用费预扣预缴个人所得税为8000元','国债利息收入免征个人所得税','张某综合所得汇算清缴应补（退）税额为退税'],answer:[0,1,2],analysis:'特许权使用费预扣预缴=50000×(1-20%)×20%=8000元；国债利息免征个税。'},
+  {year:2020,type:'indefinite',text:'甲公司为增值税一般纳税人，2020年发生如下与增值税相关的业务：（1）销售货物取得不含税销售额200000元，适用税率13%；（2）购进原材料取得增值税专用发票注明价款100000元，增值税13000元；（3）支付广告费取得增值税专用发票注明金额20000元，增值税1200元；（4）将自产货物用于职工福利，该批货物成本为30000元，不含税市场售价为50000元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为26000元','业务（4）的销项税额为6500元','甲公司当月可抵扣的进项税额为14200元','甲公司当月应纳增值税为18300元'],answer:[0,1,2,3],analysis:'销项税额=200000×13%+50000×13%=32500元；进项税额=13000+1200=14200元；应纳增值税=32500-14200=18300元。'},
 ]
 };
 
@@ -491,7 +548,7 @@ const SUBJECT_CONFIG = {
 
 let state = {
   subject: null,
-  years: [2024],
+  years: [2025],
   mode: 'exam',
   questions: [],
   currentIndex: 0,
@@ -501,6 +558,52 @@ let state = {
   submitted: false,
   reviewMode: false
 };
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  if (tab === 'home') {
+    document.getElementById('homePage').classList.add('active');
+  } else if (tab === 'kp') {
+    document.getElementById('kpPage').classList.add('active');
+    if (!document.getElementById('kpContent').innerHTML) renderKnowledge('practice');
+  } else if (tab === 'wish') {
+    document.getElementById('wishPage').classList.add('active');
+  }
+  document.querySelector('.tab-bar').style.display = 'flex';
+}
+
+function renderKnowledge(subject) {
+  const data = KNOWLEDGE[subject];
+  const container = document.getElementById('kpContent');
+  container.innerHTML = data.map((ch, i) => `
+    <div class="kp-chapter kp-ch" id="ch-${subject}-${i}">
+      <div class="kp-ch-header" onclick="toggleChapter('${subject}-${i}')">
+        <h3><span class="ch-num">${i+1}</span>${ch.title}</h3>
+        <span class="ch-arrow">▶</span>
+      </div>
+      <div class="kp-ch-body">
+        ${ch.points.map(p => `
+          <div class="kp-point">
+            <h4>${p.name} <span class="stars">${'★'.repeat(p.stars)}${'☆'.repeat(3-p.stars)}</span></h4>
+            <p>${p.desc}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleChapter(id) {
+  document.getElementById('ch-' + id).classList.toggle('expanded');
+}
+
+function switchKpSubject(subject, el) {
+  document.querySelectorAll('.kp-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderKnowledge(subject);
+}
 
 function selectSubject(subject) {
   state.subject = subject;
@@ -534,24 +637,18 @@ function selectMode(el, mode) {
 }
 
 function startExam() {
-  if (state.years.length === 0) {
-    alert('请至少选择一个年份');
-    return;
-  }
+  if (state.years.length === 0) { alert('请至少选择一个年份'); return; }
   const pool = QUESTIONS[state.subject].filter(q => state.years.includes(q.year));
-  if (pool.length === 0) {
-    alert('所选年份暂无题目');
-    return;
-  }
+  if (pool.length === 0) { alert('所选年份暂无题目'); return; }
   const config = SUBJECT_CONFIG[state.subject];
-  const questions = generateExam(pool, config);
-  state.questions = questions;
+  state.questions = generateExam(pool, config);
   state.currentIndex = 0;
   state.answers = {};
   state.submitted = false;
   state.reviewMode = false;
   state.timeLeft = config.time * 60;
   document.getElementById('examSubjectName').textContent = config.name;
+  document.querySelector('.tab-bar').style.display = 'none';
   renderQuestionNav();
   renderQuestion();
   showPage('examPage');
@@ -588,11 +685,7 @@ function startTimer() {
   clearInterval(state.timer);
   state.timer = setInterval(() => {
     state.timeLeft--;
-    if (state.timeLeft <= 0) {
-      clearInterval(state.timer);
-      submitExam();
-      return;
-    }
+    if (state.timeLeft <= 0) { clearInterval(state.timer); submitExam(); return; }
     const m = Math.floor(state.timeLeft / 60);
     const s = state.timeLeft % 60;
     document.getElementById('examTimer').textContent = `⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
@@ -604,6 +697,8 @@ function renderQuestionNav() {
   nav.innerHTML = state.questions.map((_, i) =>
     `<div class="q-nav-item ${i===state.currentIndex?'current':''} ${state.answers[i]!==undefined?'answered':''}" onclick="goToQuestion(${i})">${i+1}</div>`
   ).join('');
+  const currentItem = nav.querySelector('.q-nav-item.current');
+  if (currentItem) currentItem.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
 }
 
 function renderQuestion() {
@@ -613,7 +708,6 @@ function renderQuestion() {
   const typeClass = {single:'single',multi:'multi',judge:'judge',indefinite:'indefinite'};
   const config = SUBJECT_CONFIG[state.subject];
   const scorePerQ = q.type === 'judge' ? config.judgeScore : q.type === 'single' ? config.singleScore : q.type === 'multi' ? config.multiScore : config.indefScore;
-  const isMulti = q.type === 'multi' || q.type === 'indefinite';
   const letters = ['A','B','C','D','E','F'];
   const selected = state.answers[state.currentIndex] || [];
 
@@ -657,20 +751,14 @@ function selectOption(index) {
   const q = state.questions[state.currentIndex];
   const isMulti = q.type === 'multi' || q.type === 'indefinite';
   let selected = state.answers[state.currentIndex] || [];
-
   if (isMulti) {
-    if (selected.includes(index)) {
-      selected = selected.filter(i => i !== index);
-    } else {
-      selected = [...selected, index];
-    }
+    if (selected.includes(index)) { selected = selected.filter(i => i !== index); }
+    else { selected = [...selected, index]; }
   } else {
     selected = [index];
   }
-
   state.answers[state.currentIndex] = selected;
   renderQuestion();
-
   if (state.mode === 'practice') {
     state.reviewMode = true;
     renderQuestion();
@@ -684,10 +772,7 @@ function goToQuestion(index) {
 }
 
 function nextQuestion() {
-  if (state.currentIndex === state.questions.length - 1) {
-    showSheet();
-    return;
-  }
+  if (state.currentIndex === state.questions.length - 1) { showSheet(); return; }
   state.currentIndex++;
   state.reviewMode = false;
   renderQuestion();
@@ -710,13 +795,11 @@ function showSheet() {
   document.getElementById('sheetModal').classList.add('show');
 }
 
-function hideSheet() {
-  document.getElementById('sheetModal').classList.remove('show');
-}
+function hideSheet() { document.getElementById('sheetModal').classList.remove('show'); }
 
 function sheetGo(index) {
   state.currentIndex = index;
-  if (state.mode === 'practice') state.reviewMode = false;
+  state.reviewMode = false;
   renderQuestion();
   hideSheet();
 }
@@ -731,14 +814,8 @@ function submitExam() {
   doSubmit();
 }
 
-function confirmSubmit() {
-  hideConfirm();
-  doSubmit();
-}
-
-function hideConfirm() {
-  document.getElementById('confirmModal').classList.remove('show');
-}
+function confirmSubmit() { hideConfirm(); doSubmit(); }
+function hideConfirm() { document.getElementById('confirmModal').classList.remove('show'); }
 
 function doSubmit() {
   clearInterval(state.timer);
@@ -747,7 +824,6 @@ function doSubmit() {
   let totalScore = 0;
   const typeScores = {single:{earned:0,total:0},multi:{earned:0,total:0},judge:{earned:0,total:0},indefinite:{earned:0,total:0}};
   const wrongList = [];
-
   state.questions.forEach((q, i) => {
     const selected = state.answers[i] || [];
     const scorePerQ = q.type === 'judge' ? config.judgeScore : q.type === 'single' ? config.singleScore : q.type === 'multi' ? config.multiScore : config.indefScore;
@@ -755,57 +831,34 @@ function doSubmit() {
     let earned = 0;
     if (q.type === 'multi' || q.type === 'indefinite') {
       if (selected.length > 0 && selected.every(s => q.answer.includes(s))) {
-        if (selected.length === q.answer.length) {
-          earned = scorePerQ;
-        } else {
-          earned = scorePerQ * selected.length / q.answer.length;
-        }
+        earned = selected.length === q.answer.length ? scorePerQ : scorePerQ * selected.length / q.answer.length;
       }
     } else {
-      if (selected.length === 1 && q.answer.includes(selected[0])) {
-        earned = scorePerQ;
-      }
+      if (selected.length === 1 && q.answer.includes(selected[0])) earned = scorePerQ;
     }
     totalScore += earned;
     typeScores[q.type].earned += earned;
     if (earned < scorePerQ) {
       const letters = ['A','B','C','D','E','F'];
-      wrongList.push({
-        index: i,
-        text: q.text,
-        yourAnswer: selected.map(s => letters[s]).join('、') || '未作答',
-        correctAnswer: q.answer.map(a => letters[a]).join('、'),
-        analysis: q.analysis
-      });
+      wrongList.push({index:i,text:q.text,yourAnswer:selected.map(s=>letters[s]).join('、')||'未作答',correctAnswer:q.answer.map(a=>letters[a]).join('、'),analysis:q.analysis});
     }
   });
-
   totalScore = Math.round(totalScore * 10) / 10;
   document.getElementById('resultScore').textContent = totalScore;
   const statusEl = document.getElementById('resultStatus');
-  if (totalScore >= 60) {
-    statusEl.textContent = '🎉 恭喜通过！';
-    statusEl.className = 'score-status pass';
-  } else {
-    statusEl.textContent = '💪 继续加油！';
-    statusEl.className = 'score-status fail';
-  }
-
+  if (totalScore >= 60) { statusEl.textContent = '🎉 恭喜通过！'; statusEl.className = 'score-status pass'; }
+  else { statusEl.textContent = '💪 继续加油！'; statusEl.className = 'score-status fail'; }
   const answered = Object.keys(state.answers).length;
   const correct = state.questions.filter((q, i) => {
     const s = state.answers[i] || [];
-    if (q.type === 'multi' || q.type === 'indefinite') {
-      return s.length > 0 && s.every(x => q.answer.includes(x)) && s.length === q.answer.length;
-    }
+    if (q.type === 'multi' || q.type === 'indefinite') return s.length > 0 && s.every(x => q.answer.includes(x)) && s.length === q.answer.length;
     return s.length === 1 && q.answer.includes(s[0]);
   }).length;
-
   document.getElementById('resultStats').innerHTML = `
     <div class="result-stat"><div class="rs-val">${answered}</div><div class="rs-label">已答题</div></div>
     <div class="result-stat"><div class="rs-val">${correct}</div><div class="rs-label">答对题数</div></div>
     <div class="result-stat"><div class="rs-val">${state.questions.length - correct}</div><div class="rs-label">答错题数</div></div>
   `;
-
   const typeMap = {single:'单选题',multi:'多选题',judge:'判断题',indefinite:'不定项'};
   const typeColor = {single:'#4F6EF7',multi:'#D48806',judge:'#389E0D',indefinite:'#CF1322'};
   document.getElementById('resultDetail').innerHTML = `
@@ -818,14 +871,13 @@ function doSubmit() {
         </div>
       `).join('')}
     </div>
-    ${wrongList.length > 0 ? `<h3>错题回顾（${wrongList.length}题）</h3><div class="wrong-list">${wrongList.slice(0, 10).map(w => `
+    ${wrongList.length > 0 ? `<h3>错题回顾（${wrongList.length}题）</h3><div class="wrong-list">${wrongList.slice(0,10).map(w => `
       <div class="wrong-item">
-        <div class="wi-q">${w.index + 1}. ${w.text.substring(0, 80)}${w.text.length > 80 ? '...' : ''}</div>
+        <div class="wi-q">${w.index+1}. ${w.text.substring(0,80)}${w.text.length>80?'...':''}</div>
         <div class="wi-ans">你的答案：<span class="wrong">${w.yourAnswer}</span>　正确答案：<span class="correct">${w.correctAnswer}</span></div>
       </div>
     `).join('')}</div>` : ''}
   `;
-
   showPage('resultPage');
 }
 
@@ -841,14 +893,16 @@ function reviewExam() {
 
 function goHome() {
   clearInterval(state.timer);
-  state = {subject:null,years:[2024],mode:'exam',questions:[],currentIndex:0,answers:{},timer:null,timeLeft:0,submitted:false,reviewMode:false};
+  state = {subject:null,years:[2025],mode:'exam',questions:[],currentIndex:0,answers:{},timer:null,timeLeft:0,submitted:false,reviewMode:false};
   const footer = document.querySelector('.exam-footer');
   footer.innerHTML = `
     <button class="btn btn-outline" onclick="prevQuestion()" id="prevBtn" style="flex:1">上一题</button>
     <button class="btn btn-outline" onclick="showSheet()">答题卡</button>
     <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" style="flex:1">下一题</button>
   `;
+  document.querySelector('.tab-bar').style.display = 'flex';
   showPage('homePage');
+  document.querySelectorAll('.tab-item').forEach((t,i) => { t.classList.toggle('active', i===0); });
 }
 
 function showPage(id) {
