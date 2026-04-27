@@ -24,8 +24,9 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .home-hero h2{font-size:24px;font-weight:700;margin-bottom:8px}
 .home-hero p{font-size:14px;opacity:.85}
 .subject-cards{padding:0 16px;margin-top:-24px;position:relative;z-index:10}
-.subject-card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);cursor:pointer;transition:transform .2s}
+.subject-card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);cursor:pointer;transition:transform .2s;display:flex;align-items:center}
 .subject-card:active{transform:scale(.98)}
+.subject-card .sc-left{flex:1;min-width:0}
 .subject-card .sc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
 .subject-card .sc-icon.blue{background:#EEF1FE;color:var(--primary)}
 .subject-card .sc-icon.green{background:#E8F8EE;color:var(--success)}
@@ -33,7 +34,8 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
 .subject-card p{font-size:13px;color:var(--text-secondary);line-height:1.5}
 .subject-card .sc-meta{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--text-light)}
 .subject-card .sc-meta span{display:flex;align-items:center;gap:4px}
-.subject-card .sc-btn{margin-top:14px;padding:10px 0;font-size:14px;border-radius:8px}
+.subject-card .sc-right{display:flex;align-items:center;flex-shrink:0;margin-left:12px}
+.subject-card .sc-sim{padding:6px 14px;font-size:12px;border-radius:16px;font-weight:600;white-space:nowrap}
 .exam-info{padding:16px}
 .exam-info h3{font-size:15px;font-weight:600;margin-bottom:12px}
 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -151,26 +153,30 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","P
   </div>
   <div class="subject-cards">
     <div class="subject-card" onclick="selectSubject('practice')">
-      <div class="sc-icon blue">📒</div>
-      <h3>初级会计实务</h3>
-      <p>涵盖会计基础、资产、负债、收入费用利润、财务报表等核心知识点</p>
-      <div class="sc-meta">
-        <span>⏱ 105分钟</span>
-        <span>📝 55题</span>
-        <span>💯 100分</span>
+      <div class="sc-left">
+        <div class="sc-icon blue">📒</div>
+        <h3>初级会计实务</h3>
+        <p>涵盖会计基础、资产、负债、收入费用利润、财务报表等核心知识点</p>
+        <div class="sc-meta">
+          <span>⏱ 105分钟</span>
+          <span>📝 55题</span>
+          <span>💯 100分</span>
+        </div>
       </div>
-      <button class="btn btn-primary sc-btn" onclick="event.stopPropagation();quickStart('practice')">模拟</button>
+      <div class="sc-right"><span class="btn btn-primary sc-sim">模拟</span></div>
     </div>
     <div class="subject-card" onclick="selectSubject('law')">
-      <div class="sc-icon green">⚖️</div>
-      <h3>经济法基础</h3>
-      <p>涵盖法律基础、支付结算、增值税、企业所得税、个人所得税等法律制度</p>
-      <div class="sc-meta">
-        <span>⏱ 75分钟</span>
-        <span>📝 55题</span>
-        <span>💯 100分</span>
+      <div class="sc-left">
+        <div class="sc-icon green">⚖️</div>
+        <h3>经济法基础</h3>
+        <p>涵盖法律基础、支付结算、增值税、企业所得税、个人所得税等法律制度</p>
+        <div class="sc-meta">
+          <span>⏱ 75分钟</span>
+          <span>📝 55题</span>
+          <span>💯 100分</span>
+        </div>
       </div>
-      <button class="btn btn-primary sc-btn" onclick="event.stopPropagation();quickStart('law')">模拟</button>
+      <div class="sc-right"><span class="btn btn-primary sc-sim">模拟</span></div>
     </div>
   </div>
   <div class="exam-info">
@@ -692,25 +698,6 @@ function prevQuestion() {
   state.currentIndex--;
   state.reviewMode = false;
   renderQuestion();
-}
-
-function quickStart(subject) {
-  state.subject = subject;
-  state.years = [...new Set(QUESTIONS[subject].map(q => q.year))];
-  state.mode = 'exam';
-  const pool = QUESTIONS[subject];
-  const config = SUBJECT_CONFIG[subject];
-  state.questions = generateExam(pool, config);
-  state.currentIndex = 0;
-  state.answers = {};
-  state.submitted = false;
-  state.reviewMode = false;
-  state.timeLeft = config.time * 60;
-  document.getElementById('examSubjectName').textContent = config.name;
-  renderQuestionNav();
-  renderQuestion();
-  showPage('examPage');
-  startTimer();
 }
 
 function showSheet() {
