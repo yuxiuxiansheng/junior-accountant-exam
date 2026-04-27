@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>初级会计师模拟考试</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#4F6EF7;--primary-light:#6B83F9;--primary-bg:#EEF1FE;
+  --success:#52C41A;--error:#F5222D;--warning:#FAAD14;
+  --text:#1F2937;--text-secondary:#6B7280;--text-light:#9CA3AF;
+  --bg:#F5F7FA;--card:#fff;--border:#E5E7EB;
+  --radius:12px;--radius-sm:8px;
+}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);-webkit-tap-highlight-color:transparent}
+.page{display:none;min-height:100vh;padding-bottom:20px}
+.page.active{display:block}
+.header{position:sticky;top:0;z-index:100;background:var(--primary);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.header h1{font-size:17px;font-weight:600}
+.header-back{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.15);font-size:18px;cursor:pointer}
+.home-hero{background:linear-gradient(135deg,var(--primary),var(--primary-light));padding:40px 20px 50px;text-align:center;color:#fff;position:relative;overflow:hidden}
+.home-hero::after{content:'';position:absolute;top:-50%;right:-30%;width:200px;height:200px;background:rgba(255,255,255,.08);border-radius:50%}
+.home-hero h2{font-size:24px;font-weight:700;margin-bottom:8px}
+.home-hero p{font-size:14px;opacity:.85}
+.subject-cards{padding:0 16px;margin-top:-24px;position:relative;z-index:10}
+.subject-card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06);cursor:pointer;transition:transform .2s}
+.subject-card:active{transform:scale(.98)}
+.subject-card .sc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:12px}
+.subject-card .sc-icon.blue{background:#EEF1FE;color:var(--primary)}
+.subject-card .sc-icon.green{background:#E8F8EE;color:var(--success)}
+.subject-card h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.subject-card p{font-size:13px;color:var(--text-secondary);line-height:1.5}
+.subject-card .sc-meta{display:flex;gap:16px;margin-top:12px;font-size:12px;color:var(--text-light)}
+.subject-card .sc-meta span{display:flex;align-items:center;gap:4px}
+.exam-info{padding:16px}
+.exam-info h3{font-size:15px;font-weight:600;margin-bottom:12px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-item{background:var(--card);border-radius:var(--radius-sm);padding:14px;text-align:center}
+.info-item .ii-val{font-size:20px;font-weight:700;color:var(--primary)}
+.info-item .ii-label{font-size:12px;color:var(--text-secondary);margin-top:4px}
+.exam-setup{padding:20px 16px}
+.exam-setup h2{font-size:18px;font-weight:700;margin-bottom:20px;text-align:center}
+.setup-section{margin-bottom:20px}
+.setup-section label{display:block;font-size:14px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.year-tags{display:flex;flex-wrap:wrap;gap:8px}
+.year-tag{padding:8px 16px;border-radius:20px;font-size:13px;background:var(--card);border:1.5px solid var(--border);cursor:pointer;transition:all .2s;user-select:none}
+.year-tag.active{background:var(--primary-bg);border-color:var(--primary);color:var(--primary);font-weight:600}
+.mode-options{display:flex;flex-direction:column;gap:10px}
+.mode-option{padding:14px 16px;border-radius:var(--radius-sm);background:var(--card);border:1.5px solid var(--border);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px}
+.mode-option.active{border-color:var(--primary);background:var(--primary-bg)}
+.mode-option .mo-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mode-option.active .mo-radio{border-color:var(--primary)}
+.mode-option.active .mo-radio::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--primary)}
+.mode-option h4{font-size:14px;font-weight:600}
+.mode-option p{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.btn{display:block;width:100%;padding:14px;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:active{background:var(--primary-light)}
+.btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary)}
+.btn-block{margin:20px 16px;width:calc(100% - 32px)}
+.exam-header{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);padding:12px 16px}
+.exam-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.exam-header-top .subject-name{font-size:15px;font-weight:600}
+.exam-header-top .timer{font-size:14px;font-weight:600;color:var(--primary);display:flex;align-items:center;gap:4px}
+.progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar .fill{height:100%;background:var(--primary);border-radius:2px;transition:width .3s}
+.question-area{padding:16px}
+.question-nav{display:flex;gap:6px;overflow-x:auto;padding:0 16px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.question-nav::-webkit-scrollbar{display:none}
+.q-nav-item{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;background:var(--card);border:1.5px solid var(--border);cursor:pointer;transition:all .2s}
+.q-nav-item.current{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-nav-item.answered{background:var(--primary-bg);border-color:var(--primary);color:var(--primary)}
+.q-type-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:10px}
+.q-type-badge.single{background:#EEF1FE;color:var(--primary)}
+.q-type-badge.multi{background:#FFF7E6;color:#D48806}
+.q-type-badge.judge{background:#E8F8EE;color:#389E0D}
+.q-type-badge.indefinite{background:#FFF1F0;color:#CF1322}
+.question-text{font-size:15px;line-height:1.7;margin-bottom:20px;white-space:pre-wrap}
+.options-list{display:flex;flex-direction:column;gap:10px}
+.option-item{padding:14px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--card);cursor:pointer;transition:all .2s;display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.6}
+.option-item:active{transform:scale(.99)}
+.option-item.selected{border-color:var(--primary);background:var(--primary-bg)}
+.option-item.correct{border-color:var(--success);background:#F0FFF4}
+.option-item.wrong{border-color:var(--error);background:#FFF1F0}
+.option-item .opt-letter{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:var(--bg);flex-shrink:0;margin-top:1px}
+.option-item.selected .opt-letter{background:var(--primary);color:#fff}
+.option-item.correct .opt-letter{background:var(--success);color:#fff}
+.option-item.wrong .opt-letter{background:var(--error);color:#fff}
+.exam-footer{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;z-index:100}
+.exam-footer .btn{flex:1;padding:12px}
+.answer-analysis{margin-top:16px;padding:16px;background:#FAFBFC;border-radius:var(--radius-sm);border-left:3px solid var(--primary)}
+.answer-analysis h4{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--primary)}
+.answer-analysis p{font-size:13px;line-height:1.7;color:var(--text-secondary)}
+.result-hero{background:linear-gradient(135deg,var(--primary),var(--primary-light));padding:40px 20px;text-align:center;color:#fff}
+.result-hero .score{font-size:56px;font-weight:800;line-height:1}
+.result-hero .score-label{font-size:14px;opacity:.8;margin-top:4px}
+.result-hero .score-status{font-size:18px;font-weight:600;margin-top:12px;padding:6px 20px;border-radius:20px;display:inline-block}
+.result-hero .score-status.pass{background:rgba(82,196,26,.3)}
+.result-hero .score-status.fail{background:rgba(245,34,45,.3)}
+.result-stats{display:flex;gap:1px;background:var(--border);margin:0 16px;margin-top:-20px;border-radius:var(--radius);overflow:hidden;position:relative;z-index:10}
+.result-stat{flex:1;background:var(--card);padding:16px 8px;text-align:center}
+.result-stat .rs-val{font-size:22px;font-weight:700;color:var(--primary)}
+.result-stat .rs-label{font-size:11px;color:var(--text-secondary);margin-top:4px}
+.result-detail{padding:16px}
+.result-detail h3{font-size:15px;font-weight:600;margin-bottom:12px}
+.type-summary{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.type-row{background:var(--card);border-radius:var(--radius-sm);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.type-row .tr-left{display:flex;align-items:center;gap:8px}
+.type-row .tr-dot{width:8px;height:8px;border-radius:50%}
+.type-row .tr-name{font-size:14px;font-weight:500}
+.type-row .tr-score{font-size:14px;color:var(--text-secondary)}
+.type-row .tr-score span{font-weight:600;color:var(--primary)}
+.wrong-list{padding:0 16px}
+.wrong-item{background:var(--card);border-radius:var(--radius-sm);padding:16px;margin-bottom:10px}
+.wrong-item .wi-q{font-size:14px;line-height:1.6;margin-bottom:8px}
+.wrong-item .wi-ans{font-size:13px;color:var(--text-secondary)}
+.wrong-item .wi-ans span{font-weight:600}
+.wrong-item .wi-ans .correct{color:var(--success)}
+.wrong-item .wi-ans .wrong{color:var(--error)}
+.sheet-modal{position:fixed;inset:0;z-index:200;display:none}
+.sheet-modal.show{display:block}
+.sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,.4)}
+.sheet-content{position:absolute;bottom:0;left:0;right:0;background:#fff;border-radius:16px 16px 0 0;padding:20px 16px;max-height:70vh;overflow-y:auto}
+.sheet-content h3{text-align:center;font-size:16px;font-weight:600;margin-bottom:16px}
+.sheet-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sheet-item{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--bg);cursor:pointer;border:1.5px solid transparent}
+.sheet-item.answered{background:var(--primary-bg);border-color:var(--primary);color:var(--primary)}
+.sheet-item.current{background:var(--primary);color:#fff}
+.sheet-item.wrong-mark{background:#FFF1F0;border-color:var(--error);color:var(--error)}
+.sheet-item.correct-mark{background:#F0FFF4;border-color:var(--success);color:var(--success)}
+.confirm-modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4)}
+.confirm-modal.show{display:flex}
+.confirm-box{background:#fff;border-radius:var(--radius);padding:24px;width:calc(100% - 64px);max-width:320px;text-align:center}
+.confirm-box h3{font-size:17px;font-weight:600;margin-bottom:8px}
+.confirm-box p{font-size:14px;color:var(--text-secondary);margin-bottom:20px;line-height:1.5}
+.confirm-btns{display:flex;gap:10px}
+.confirm-btns .btn{flex:1;padding:12px;font-size:14px}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-light)}
+.empty-state .icon{font-size:48px;margin-bottom:12px}
+.empty-state p{font-size:14px}
+</style>
+</head>
+<body>
+
+<div id="homePage" class="page active">
+  <div class="home-hero">
+    <h2>初级会计师模拟考试</h2>
+    <p>历年真题 · 随机组卷 · 智能评分</p>
+  </div>
+  <div class="subject-cards">
+    <div class="subject-card" onclick="selectSubject('practice')">
+      <div class="sc-icon blue">📒</div>
+      <h3>初级会计实务</h3>
+      <p>涵盖会计基础、资产、负债、收入费用利润、财务报表等核心知识点</p>
+      <div class="sc-meta">
+        <span>⏱ 105分钟</span>
+        <span>📝 55题</span>
+        <span>💯 100分</span>
+      </div>
+    </div>
+    <div class="subject-card" onclick="selectSubject('law')">
+      <div class="sc-icon green">⚖️</div>
+      <h3>经济法基础</h3>
+      <p>涵盖法律基础、支付结算、增值税、企业所得税、个人所得税等法律制度</p>
+      <div class="sc-meta">
+        <span>⏱ 75分钟</span>
+        <span>📝 55题</span>
+        <span>💯 100分</span>
+      </div>
+    </div>
+  </div>
+  <div class="exam-info">
+    <h3>考试说明</h3>
+    <div class="info-grid">
+      <div class="info-item"><div class="ii-val">60</div><div class="ii-label">合格分数</div></div>
+      <div class="info-item"><div class="ii-val">100</div><div class="ii-label">满分</div></div>
+      <div class="info-item"><div class="ii-val">4</div><div class="ii-label">题型种类</div></div>
+      <div class="info-item"><div class="ii-val">1年</div><div class="ii-label">成绩有效期</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="setupPage" class="page">
+  <div class="header">
+    <div class="header-back" onclick="goHome()">←</div>
+    <h1 id="setupTitle">考试设置</h1>
+    <div style="width:32px"></div>
+  </div>
+  <div class="exam-setup">
+    <h2>模拟考试设置</h2>
+    <div class="setup-section">
+      <label>选择年份（可多选）</label>
+      <div class="year-tags" id="yearTags"></div>
+    </div>
+    <div class="setup-section">
+      <label>考试模式</label>
+      <div class="mode-options">
+        <div class="mode-option active" onclick="selectMode(this,'exam')">
+          <div class="mo-radio"></div>
+          <div><h4>模拟考试</h4><p>限时作答，交卷后查看成绩与解析</p></div>
+        </div>
+        <div class="mode-option" onclick="selectMode(this,'practice')">
+          <div class="mo-radio"></div>
+          <div><h4>练习模式</h4><p>不限时间，每题即时反馈答案与解析</p></div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="startExam()">开始考试</button>
+  </div>
+</div>
+
+<div id="examPage" class="page">
+  <div class="exam-header">
+    <div class="exam-header-top">
+      <span class="subject-name" id="examSubjectName"></span>
+      <span class="timer" id="examTimer">⏱ 00:00</span>
+    </div>
+    <div class="progress-bar"><div class="fill" id="progressFill"></div></div>
+  </div>
+  <div class="question-nav" id="questionNav"></div>
+  <div class="question-area" id="questionArea"></div>
+  <div class="exam-footer">
+    <button class="btn btn-outline" onclick="showSheet()">答题卡</button>
+    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">下一题</button>
+  </div>
+</div>
+
+<div id="resultPage" class="page">
+  <div class="result-hero">
+    <div class="score" id="resultScore">0</div>
+    <div class="score-label">总分 100 分</div>
+    <div class="score-status" id="resultStatus"></div>
+  </div>
+  <div class="result-stats" id="resultStats"></div>
+  <div class="result-detail" id="resultDetail"></div>
+  <div style="padding:0 16px 20px;display:flex;gap:10px">
+    <button class="btn btn-outline" style="flex:1" onclick="reviewExam()">查看解析</button>
+    <button class="btn btn-primary" style="flex:1" onclick="goHome()">返回首页</button>
+  </div>
+</div>
+
+<div class="sheet-modal" id="sheetModal">
+  <div class="sheet-overlay" onclick="hideSheet()"></div>
+  <div class="sheet-content">
+    <h3>答题卡</h3>
+    <div class="sheet-grid" id="sheetGrid"></div>
+    <button class="btn btn-primary" style="margin-top:16px" onclick="submitExam()">交卷</button>
+  </div>
+</div>
+
+<div class="confirm-modal" id="confirmModal">
+  <div class="confirm-box">
+    <h3>确认交卷？</h3>
+    <p id="confirmMsg"></p>
+    <div class="confirm-btns">
+      <button class="btn btn-outline" onclick="hideConfirm()">继续答题</button>
+      <button class="btn btn-primary" onclick="confirmSubmit()">确认交卷</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = {
+practice: [
+  {year:2024,type:'single',text:'甲公司为增值税一般纳税人，2023年11月，以其生产的300台空调作为福利发放给职工，每台成本为1500元，每台不含税市场售价为2000元。不考虑其他因素，甲公司应确认的应付职工薪酬金额为（　）元。',options:['678000','600000','450000','508500'],answer:[0],analysis:'甲公司应确认的应付职工薪酬金额=300×2000×(1+13%)=678000(元)。'},
+  {year:2024,type:'single',text:'企业转销无法支付的应付账款，应贷记的会计科目是（　）。',options:['营业外收入','主营业务收入','管理费用','其他业务收入'],answer:[0],analysis:'企业对于确实无法支付的应付账款应予以转销，按其账面余额计入营业外收入，借记"应付账款"科目，贷记"营业外收入"科目。'},
+  {year:2024,type:'single',text:'下列关于企业留存收益的说法中，正确的是（　）。',options:['不包括净利润','是企业内部积累','包括注册资本和资本公积','不包括历年利润'],answer:[1],analysis:'留存收益是企业从历年实现的利润中提取或形成的留存于企业的内部积累，包括盈余公积和未分配利润。'},
+  {year:2024,type:'single',text:'某事业单位为增值税小规模纳税人，购入一台不需要安装的专用设备，设备价款和增值税税额合计为565000元，由财政直接支付。该事业单位购入固定资产的账务处理为（　）。',options:['借：固定资产565000　贷：财政拨款预算收入565000','借：事业支出565000　贷：财政拨款收入565000','借：固定资产565000　贷：财政拨款收入565000　借：事业支出565000　贷：财政拨款预算收入565000','借：固定资产565000　贷：事业收入565000'],answer:[2],analysis:'事业单位购入固定资产时：借：固定资产565000　贷：财政拨款收入565000；同时，在预算会计中：借：事业支出565000　贷：财政拨款预算收入565000。'},
+  {year:2024,type:'single',text:'在财政直接支付方式下，年度终了，单位根据本年度财政直接支付预算指标数与当年财政直接支付实际支出数的差额，在预算会计中，应借记（　）科目。',options:['财政应返还额度','资金结存——财政应返还额度','财政拨款预算收入','零余额账户用款额度'],answer:[1],analysis:'在财政直接支付方式下，年度终了，单位根据本年度财政直接支付预算指标数与当年财政直接支付实际支出数的差额，在预算会计中借记"资金结存——财政应返还额度"科目，贷记"财政拨款预算收入"科目。'},
+  {year:2024,type:'single',text:'采用预收款方式确认事业（预算）收入，实际收到预收款项时，预算会计中应作的账务处理是（　）。',options:['借记"银行存款"科目，贷记"预收账款"科目','借记"银行存款"科目，贷记"事业预算收入"科目','借记"资金结存——货币资金"，贷记"事业预算收入"科目','借记"银行存款——货币资金"，贷记"预收账款"科目'],answer:[2],analysis:'采用预收款方式确认事业（预算）收入，实际收到预收款项时，在预算会计中借记"资金结存——货币资金"科目，贷记"事业预算收入"科目。'},
+  {year:2023,type:'single',text:'下列各项业务中，应编制付款凭证的是（　）。',options:['收回前欠货款40000元','购入材料70000元，货款未付','以银行存款归还前欠货款60000元','接受投资者投入资金90000元'],answer:[2],analysis:'选项A、D应编制收款凭证；选项B应编制转账凭证；选项C涉及银行存款减少，应编制付款凭证。'},
+  {year:2023,type:'single',text:'下列各项中，应采用数量金额式账簿的是（　）。',options:['原材料明细账','管理费用明细账','生产成本明细账','主营业务收入明细账'],answer:[0],analysis:'数量金额式账簿可以反映财产物资的实物数量和价值量。故原材料、库存商品等明细账一般采用数量金额式账簿。'},
+  {year:2023,type:'single',text:'甲企业为增值税小规模纳税人，原材料采用计划成本核算，A材料计划成本每吨为30元，本期购进A材料5000吨，收到增值税专用发票上注明的价款总额为140000元，增值税税额为18200元，另发生运杂费2000元，增值税税额为180元。原材料运抵企业后验收入库原材料4995吨，运输途中合理损耗5吨，购进A材料发生的成本差异（超支）为（　）元。',options:['10350','10380','7850','10530'],answer:[3],analysis:'购进A材料的实际成本=140000+18200+2000+180=160380（元），计划成本=(5000-5)×30=149850（元），超支差=160380-149850=10530（元）。'},
+  {year:2023,type:'single',text:'企业未设置"预付账款"科目，发生预付货款业务时应借记的会计科目是（　）。',options:['预收账款','其他应付款','应收账款','应付账款'],answer:[3],analysis:'企业未设置"预付账款"科目，发生预付货款业务时应借记"应付账款"科目。'},
+  {year:2022,type:'single',text:'下列各项中，不影响营业利润的是（　）。',options:['出售原材料净收益','计提存货跌价准备','出售固定资产净损失','确认所得税费用'],answer:[3],analysis:'所得税费用影响净利润，不影响营业利润。出售原材料净收益计入其他业务收入，计提存货跌价准备计入资产减值损失，出售固定资产净损失计入资产处置损益，均影响营业利润。'},
+  {year:2022,type:'single',text:'某企业年初未分配利润为100万元，本年实现净利润500万元，按10%提取法定盈余公积，宣告发放现金股利200万元，该企业年末未分配利润为（　）万元。',options:['350','360','400','500'],answer:[1],analysis:'年末未分配利润=100+500-500×10%-200=360（万元）。'},
+  {year:2022,type:'single',text:'下列各项中，应计入管理费用的是（　）。',options:['预计产品质量保证损失','排污费','专设销售机构固定资产折旧费','汇兑损益'],answer:[1],analysis:'选项A计入销售费用；选项B排污费计入管理费用；选项C计入销售费用；选项D计入财务费用。'},
+  {year:2021,type:'single',text:'下列各项中，属于企业在产品的是（　）。',options:['已验收入库的完工产品','已完成销售手续的产品','正在加工中的产品','已入库尚待加工的原材料'],answer:[2],analysis:'在产品是指正在加工中的产品，尚未完工。已验收入库的完工产品和已完成销售手续的产品属于产成品，已入库尚待加工的原材料属于原材料。'},
+  {year:2021,type:'single',text:'某企业采用先进先出法计算发出原材料的成本。2021年9月1日，甲材料结存200千克，每千克实际成本为300元；9月7日购入甲材料350千克，每千克实际成本为310元；9月21日购入甲材料400千克，每千克实际成本为290元；9月28日发出甲材料500千克。9月份甲材料发出成本为（　）元。',options:['153000','152500','152000','151500'],answer:[0],analysis:'发出成本=200×300+300×310=60000+93000=153000（元）。'},
+  {year:2021,type:'single',text:'下列各项中，应通过"其他应收款"科目核算的是（　）。',options:['应收销售商品款','应收租入包装物租金','应收提供劳务款','应收股利'],answer:[1],analysis:'选项A、C通过"应收账款"核算；选项B通过"其他应收款"核算；选项D通过"应收股利"核算。'},
+  {year:2020,type:'single',text:'某饮料生产企业为增值税一般纳税人，年末将本企业生产的一批饮料发放给职工作为福利。该批饮料市场售价为12万元（不含增值税），增值税税率为13%，实际成本为10万元。假定不考虑其他因素，该企业应确认的应付职工薪酬为（　）万元。',options:['10','11.3','12','13.56'],answer:[3],analysis:'将自产产品用于职工福利，要确认收入，应付职工薪酬=12+12×13%=13.56(万元)。'},
+  {year:2020,type:'single',text:'某企业计提生产车间管理人员基本养老保险费120000元。下列各项中，关于该事项的会计处理正确的是（　）。',options:['借：管理费用120000　贷：应付职工薪酬——设定提存计划120000','借：制造费用120000　贷：应付职工薪酬——设定提存计划120000','借：制造费用120000　贷：银行存款120000','借：制造费用120000　贷：其他应付款120000'],answer:[1],analysis:'计提生产车间管理人员的养老保险费：借：制造费用120000　贷：应付职工薪酬——设定提存计划——基本养老保险费120000。'},
+  {year:2020,type:'single',text:'某企业年初所有者权益总额为500万元，当年以资本公积转增资本50万元，实现净利润200万元，提取盈余公积20万元，向投资者分配利润50万元。该企业年末所有者权益总额为（　）万元。',options:['650','700','600','750'],answer:[0],analysis:'资本公积转增资本、提取盈余公积属于所有者权益内部增减变动，不影响总额。年末所有者权益=500+200-50=650(万元)。'},
+  {year:2020,type:'single',text:'下列各项中，关于无形资产摊销的会计处理表述正确的是（　）。',options:['无形资产摊销额均计入当期损益','出租的无形资产摊销额计入营业外支出','使用寿命不确定的无形资产不应摊销','使用寿命有限的无形资产自可供使用下月起开始摊销'],answer:[2],analysis:'选项A，无形资产摊销额可能计入制造费用等；选项B，出租的无形资产摊销额计入其他业务成本；选项C正确，使用寿命不确定的无形资产不应摊销；选项D，应自可供使用当月起开始摊销。'},
+  {year:2024,type:'multi',text:'下列各项中，属于政府会计主体资产的有（　）。',options:['在建工程','长期投资','保障性住房','自然资源资产'],answer:[0,1,2,3],analysis:'政府会计主体的资产按照流动性，分为流动资产和非流动资产。其中，非流动资产包括固定资产、在建工程、无形资产、长期投资、公共基础设施、政府储备资产、文物文化资产、保障性住房和自然资源资产等。'},
+  {year:2024,type:'multi',text:'下列各项中，应通过"应付职工薪酬——非货币性福利"科目核算的有（　）。',options:['计提职工教育经费','为高级管理人员提供免费使用的汽车折旧费','为职工代垫医药费','作为职工福利发放给职工的自产产品'],answer:[1,3],analysis:'选项B、D都是通过"应付职工薪酬——非货币性福利"核算；选项A通过"应付职工薪酬"科目核算，但不通过"非货币性福利"明细科目；选项C通过"其他应收款"科目核算。'},
+  {year:2023,type:'multi',text:'下列各项中，属于企业流动资产的有（　）。',options:['应收账款','预付账款','工程物资','存货'],answer:[0,1,3],analysis:'流动资产包括货币资金、应收及预付款项、交易性金融资产、存货等。工程物资属于非流动资产。'},
+  {year:2023,type:'multi',text:'下列各项中，影响企业营业利润的有（　）。',options:['出售原材料收入','计提固定资产减值准备','公益捐赠支出','出售无形资产净收益'],answer:[0,1,3],analysis:'选项A计入其他业务收入；选项B计入资产减值损失；选项C计入营业外支出，不影响营业利润；选项D计入资产处置损益。'},
+  {year:2022,type:'multi',text:'下列各项中，应计入存货成本的有（　）。',options:['采购价款','运输途中的合理损耗','入库前的挑选整理费','增值税进项税额'],answer:[0,1,2],analysis:'存货成本包括采购价款、运输途中的合理损耗、入库前的挑选整理费等。增值税进项税额可以抵扣，不计入存货成本。'},
+  {year:2022,type:'multi',text:'下列各项中，属于企业无形资产的有（　）。',options:['专利权','商标权','土地使用权','商誉'],answer:[0,1,2],analysis:'无形资产包括专利权、非专利技术、商标权、著作权、土地使用权等。商誉不属于无形资产，单独确认。'},
+  {year:2021,type:'multi',text:'下列各项中，属于企业留存收益的有（　）。',options:['实收资本','资本公积','盈余公积','未分配利润'],answer:[2,3],analysis:'留存收益包括盈余公积和未分配利润。实收资本和资本公积不属于留存收益。'},
+  {year:2021,type:'multi',text:'下列各项中，会引起企业资产和负债同时增加的有（　）。',options:['向银行借款存入银行','赊购原材料','收到投资者投入资本','以银行存款偿还应付账款'],answer:[0,1],analysis:'选项A，资产（银行存款）增加，负债（短期借款）增加；选项B，资产（原材料）增加，负债（应付账款）增加；选项C，资产增加，所有者权益增加；选项D，资产减少，负债减少。'},
+  {year:2020,type:'multi',text:'下列各项中，属于企业流动负债的有（　）。',options:['应付账款','预收账款','长期借款','应付职工薪酬'],answer:[0,1,3],analysis:'流动负债包括短期借款、应付及预收款项、应付职工薪酬等。长期借款属于非流动负债。'},
+  {year:2020,type:'multi',text:'下列各项中，关于产品成本计算分步法的表述正确的有（　）。',options:['适用于大量大批的多步骤生产','成本计算期与产品的生产周期一致','需要计算和结转各步骤半成品成本','不能为各生产步骤在产品的实物管理和资金管理提供资料'],answer:[0,2],analysis:'分步法适用于大量大批的多步骤生产；需要计算和结转各步骤半成品成本；成本计算期与会计报告期一致，而非生产周期；能为各步骤在产品的实物管理和资金管理提供资料。'},
+  {year:2024,type:'judge',text:'所有者权益变动表中"综合收益总额"项目，反映净利润和其他综合收益扣除所得税影响后的净额相加后的合计金额。（　）',options:['正确','错误'],answer:[0],analysis:'所有者权益变动表中"综合收益总额"项目，反映净利润和其他综合收益扣除所得税影响后的净额相加后的合计金额。表述正确。'},
+  {year:2024,type:'judge',text:'消耗性生物资产发生减值一经计提，不可转回。（　）',options:['正确','错误'],answer:[1],analysis:'消耗性生物资产减值的影响因素已经消失的，减记金额应当予以恢复，并在原已计提的跌价准备金额内转回，转回的金额计入当期损益。'},
+  {year:2024,type:'judge',text:'高危行业企业如有按国家规定提取安全生产费的，应当在资产负债表所有者权益项下的"其他综合收益"项目和"盈余公积"项目之间增设"专项储备"项目。（　）',options:['正确','错误'],answer:[0],analysis:'高危行业企业如有按国家规定提取安全生产费的，应当在资产负债表所有者权益项下增设"专项储备"项目，反映企业提取的安全生产费期末余额。'},
+  {year:2023,type:'judge',text:'到期的银行承兑汇票企业无力支付时，应转入"应付账款"科目。（　）',options:['正确','错误'],answer:[1],analysis:'到期的银行承兑汇票企业无力支付时，应转入"短期借款"科目，而非"应付账款"科目。'},
+  {year:2023,type:'judge',text:'短期借款利息在预提或实际支付时均应通过"短期借款"科目核算。（　）',options:['正确','错误'],answer:[1],analysis:'预提的利息通过"应付利息"科目核算，不通过"短期借款"科目。预提时，借：财务费用，贷：应付利息。'},
+  {year:2023,type:'judge',text:'因解除与职工的劳动关系给予的补偿，属于企业短期薪酬核算范围。（　）',options:['正确','错误'],answer:[1],analysis:'因解除与职工的劳动关系给予的补偿属于辞退福利，是长期职工薪酬的内容，不属于短期薪酬。'},
+  {year:2022,type:'judge',text:'企业发生的借款利息费用，应当计入当期损益。（　）',options:['正确','错误'],answer:[1],analysis:'企业发生的借款利息费用，满足资本化条件的应当予以资本化，计入相关资产成本，不应当全部计入当期损益。'},
+  {year:2022,type:'judge',text:'企业出售固定资产的净损失，应确认为企业的营业外支出。（　）',options:['正确','错误'],answer:[1],analysis:'企业出售固定资产的净损失，应通过"资产处置损益"科目核算，不计入营业外支出。'},
+  {year:2021,type:'judge',text:'资产负债表日企业按工资总额的一定比例缴存基本养老保险属于设定提存计划，应确认为应付职工薪酬。（　）',options:['正确','错误'],answer:[0],analysis:'资产负债表日企业按工资总额的一定比例缴存基本养老保险属于设定提存计划，应确认为应付职工薪酬。'},
+  {year:2021,type:'judge',text:'企业采用计划成本核算原材料，发出材料应负担的材料成本差异应当按期（月）分摊，不得在季末或年末一次计算。（　）',options:['正确','错误'],answer:[0],analysis:'企业采用计划成本核算原材料，发出材料应负担的材料成本差异应当按期（月）分摊，不得在季末或年末一次计算。'},
+  {year:2020,type:'judge',text:'非货币性福利不能确认受益对象时，应当计入当期损益和应付职工薪酬。（　）',options:['正确','错误'],answer:[0],analysis:'非货币性福利不能确认受益对象时，应当计入当期损益和应付职工薪酬。'},
+  {year:2020,type:'judge',text:'企业取得交易性金融资产时支付的交易费用，应计入投资收益。（　）',options:['正确','错误'],answer:[0],analysis:'企业取得交易性金融资产时支付的交易费用，应计入投资收益的借方。'},
+  {year:2024,type:'indefinite',text:'甲公司为增值税一般纳税人，适用的增值税税率为13%。2023年12月发生如下经济业务：（1）将自产的300台空调作为福利发放给职工，每台成本1500元，每台不含税市场售价2000元；（2）购入一批原材料，增值税专用发票上注明的价款为50000元，增值税税额为6500元；（3）销售一批商品，不含税售价为100000元，成本为70000元，款项已收。根据上述资料，下列说法正确的有（　）。',options:['业务（1）应确认应付职工薪酬678000元','业务（1）应确认主营业务收入600000元','业务（2）原材料入账价值为56500元','业务（3）应确认主营业务收入100000元'],answer:[0,1,3],analysis:'业务（1）：应付职工薪酬=300×2000×(1+13%)=678000元，同时确认主营业务收入600000元；业务（2）：原材料入账价值为50000元（不含增值税）；业务（3）：确认主营业务收入100000元。'},
+  {year:2023,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年发生的有关经济业务如下：（1）4月1日，向银行借入一笔生产经营用短期借款，共计200000元，期限为6个月，年利率为6%，按月计提利息，到期一次还本付息；（2）5月31日，计提上述短期借款利息；（3）10月1日，偿还短期借款本金和利息。根据上述资料，下列说法正确的有（　）。',options:['4月1日借入短期借款，应贷记"短期借款"科目200000元','5月31日计提利息，应借记"财务费用"科目1000元','5月31日计提利息，应贷记"应付利息"科目1000元','10月1日偿还本息，应借记"短期借款"科目200000元和"应付利息"科目6000元'],answer:[0,1,2,3],analysis:'月利息=200000×6%÷12=1000元；4-9月共6个月利息=6000元。计提利息时：借：财务费用1000，贷：应付利息1000。偿还时：借：短期借款200000、应付利息6000，贷：银行存款206000。'},
+  {year:2022,type:'indefinite',text:'甲公司2022年度利润总额为500万元，适用的企业所得税税率为25%。甲公司当年发生如下纳税调整事项：（1）国债利息收入10万元；（2）行政罚款支出5万元；（3）当年发生研发费用100万元，符合税法规定的加计扣除比例为75%。不考虑其他因素，根据上述资料，下列说法正确的有（　）。',options:['国债利息收入应调减应纳税所得额10万元','行政罚款支出应调增应纳税所得额5万元','研发费用加计扣除应调减应纳税所得额75万元','甲公司2022年应交所得税为105万元'],answer:[0,1,2,3],analysis:'应纳税所得额=500-10+5-75=420(万元)；应交所得税=420×25%=105(万元)。国债利息收入免税调减10万元；行政罚款不得税前扣除调增5万元；研发费用加计扣除调减100×75%=75万元。'},
+  {year:2021,type:'indefinite',text:'甲公司为增值税一般纳税人，2021年发生如下与固定资产相关的经济业务：（1）3月10日，购入一台不需要安装的生产设备，增值税专用发票上注明的价款为100000元，增值税税额为13000元，另支付运杂费2000元，增值税税额为180元，全部款项以银行存款支付；（2）该设备预计使用年限为5年，预计净残值为4000元，采用年限平均法计提折旧；（3）该设备于2021年4月开始计提折旧。根据上述资料，下列说法正确的有（　）。',options:['该设备的入账价值为102000元','该设备的入账价值为115180元','2021年该设备应计提折旧额为14700元','2021年该设备应计提折旧额为19600元'],answer:[0,2],analysis:'设备入账价值=100000+2000=102000元（不含增值税）；月折旧额=(102000-4000)÷(5×12)=1633.33元；2021年计提9个月（4-12月），折旧额=1633.33×9≈14700元。'},
+  {year:2020,type:'indefinite',text:'甲公司为增值税一般纳税人，2020年发生如下经济业务：（1）5月1日，购入一批原材料，增值税专用发票上注明的价款为200000元，增值税税额为26000元，材料已验收入库，款项通过银行转账支付；（2）5月10日，领用该批原材料的60%用于生产产品，10%用于车间一般耗用，5%用于行政管理部门；（3）5月31日，该批原材料剩余25%。根据上述资料，下列说法正确的有（　）。',options:['购入原材料的入账价值为200000元','生产产品领用原材料120000元','车间一般耗用原材料20000元','行政管理部门领用原材料10000元'],answer:[0,1,2,3],analysis:'原材料入账价值=200000元（不含增值税）；生产产品领用=200000×60%=120000元；车间一般耗用=200000×10%=20000元；行政管理部门领用=200000×5%=10000元。'},
+],
+law: [
+  {year:2024,type:'single',text:'根据关税法律制度的规定，对原产于与我国签订含有关税优惠条款的区域性贸易协定的国家或者地区的进口货物，适用的税率是（　）。',options:['最惠国税率','协定税率','特惠税率','普通税率'],answer:[1],analysis:'对原产于与我国签订含有关税优惠条款的区域性贸易协定的国家或者地区的进口货物，适用协定税率。'},
+  {year:2024,type:'single',text:'2023年度某小型企业财务资料显示会计利润为370万元，另有经税务机关核定的2022年亏损为70万元。假设无其他纳税调整事项，该企业2023年应纳税额为（　）万元。（企业所得税税率为25%）',options:['77.5','72.5','75','70'],answer:[2],analysis:'应纳税所得额=370-70=300(万元)，应纳税额=300×25%=75(万元)。'},
+  {year:2024,type:'single',text:'根据关税法律制度的规定，下列各项中，按复合税率征收关税的是（　）。',options:['啤酒','汽车','原油','摄像机'],answer:[3],analysis:'选项A、C实行从量计征；选项B实行从价计征；选项D摄像机实行复合计征。'},
+  {year:2024,type:'single',text:'王某自有一处平房，共16间，其中用于个人开餐馆的7间（房屋原值为20万元）。2023年1月1日，王某将4间出典给李某，取得出典价款收入12万元，将剩余的5间出租给某公司，每月收取租金1万元。已知该地区规定按照房产原值一次扣除20%后的余值计税，则王某2023年应纳房产税额为（　）。',options:['1.652万元','0.816万元','0.672万元','1.632万元'],answer:[3],analysis:'开餐馆的房产应纳房产税=20×(1-20%)×1.2%=0.192(万元)；房屋产权出典的，承典人为纳税人，王某无需缴纳房产税；出租房屋应纳房产税=1×12×12%=1.44(万元)；合计=0.192+1.44=1.632(万元)。'},
+  {year:2024,type:'single',text:'张某以140万元的价格出售普通住宅一套，该住宅在3年前以50万元购入，交易过程中支付相关税费等共计10万元（发票为证），则张某应缴纳的个人所得税为（　）万元。',options:['0','14.4','16','18'],answer:[2],analysis:'应纳税额=(收入总额-财产原值-合理费用)×20%=(140-50-10)×20%=16(万元)。'},
+  {year:2024,type:'single',text:'税务机关追征税款的期限为（　）年。',options:['3','5','2','10'],answer:[0],analysis:'因税务机关的责任，致使纳税人、扣缴义务人未缴或者少缴税款的，税务机关在3年内可以要求纳税人、扣缴义务人补缴税款。'},
+  {year:2023,type:'single',text:'下列自然人中，属于限制民事行为能力人的是（　）。',options:['李某，20周岁，系大学在校学生','张某，17周岁，依靠工资收入作为自己全部生活来源','刘某，9周岁，系小学三年级学生','王某，6周岁，经常登台演出并有一定收入'],answer:[2],analysis:'8周岁以上不满18周岁的未成年人为限制民事行为能力人。选项A为完全民事行为能力人；选项B视为完全民事行为能力人；选项D为无民事行为能力人（不满8周岁）。'},
+  {year:2023,type:'single',text:'根据《会计档案管理办法》的规定，下列会计档案应永久保存的是（　）。',options:['记账凭证','原始凭证','会计档案保管清册','半年度财务报告'],answer:[2],analysis:'永久保存的会计档案包括：年度财务报告、会计档案销毁清册、会计档案保管清册、会计档案鉴定意见书。'},
+  {year:2023,type:'single',text:'根据会计法律制度的规定，担任会计机构负责人，应当具备会计师以上专业技术职务资格或者从事会计工作达到一定期限以上。该期限为（　）。',options:['1年','2年','3年','5年'],answer:[2],analysis:'担任会计机构负责人或会计主管人员需具备会计师以上专业技术职务资格或者从事会计工作不少于3年。'},
+  {year:2023,type:'single',text:'甲公司成立后在某银行申请开立了一个用于办理日常转账结算和现金收付的账户，该账户性质属于（　）。',options:['基本存款账户','一般存款账户','专用存款账户','临时存款账户'],answer:[0],analysis:'基本存款账户是存款人因办理日常转账结算和现金收付需要开立的银行结算账户。'},
+  {year:2022,type:'single',text:'2021年3月1日，甲公司向乙公司签发一张由丙公司承兑的汇票，乙公司将该汇票背书转让给丁公司，同时丙公司提供票据保证，该汇票上的权利人是（　）。',options:['丙公司','乙公司','丁公司','甲公司'],answer:[2],analysis:'丁公司作为票据持有人，拥有票据权利，属于汇票上的权利人。'},
+  {year:2022,type:'single',text:'根据支付结算法律制度的规定，下列关于票据背书的表述中，正确的是（　）。',options:['以背书转让的票据，背书应当连续','背书时附有条件的，背书无效','委托收款背书的被背书人可再以背书转让票据权利','票据上第一背书人为出票人'],answer:[0],analysis:'选项B：背书附有条件的，所附条件不具有票据上的效力，背书有效；选项C：委托收款背书的被背书人不得再以背书转让票据权利；选项D：票据上的第一背书人为票据收款人。'},
+  {year:2022,type:'single',text:'下列关于银行汇票的表述中，不正确的是（　）。',options:['持票人向银行提示付款时，须同时提交银行汇票和解讫通知','银行汇票的提示付款期限自出票日起1个月','申请人和收款人均为单位的，可以签发现金银行汇票','银行汇票背书转让的金额以不超过出票金额的实际结算金额为准'],answer:[2],analysis:'申请人或者收款人为单位的，银行不得为其签发现金银行汇票。'},
+  {year:2022,type:'single',text:'根据支付结算法律制度的规定，下列各项票据中，"付款人名称"不是必须记载事项的是（　）。',options:['银行汇票','银行本票','商业汇票','支票'],answer:[1],analysis:'银行本票的出票人和付款人均为出票银行，因此付款人名称不是银行本票的必须记载事项。'},
+  {year:2021,type:'single',text:'根据增值税法律制度的规定，下列各项中，应缴纳增值税的是（　）。',options:['居民存款利息','个人转让著作权','残疾人组织直接进口供残疾人专用的物品','销售代销货物'],answer:[3],analysis:'选项A、B、C均属于免征增值税项目；选项D销售代销货物应缴纳增值税。'},
+  {year:2021,type:'single',text:'根据个人所得税法律制度的规定，下列各项中，属于综合所得的是（　）。',options:['利息股息红利所得','财产租赁所得','经营所得','劳务报酬所得'],answer:[3],analysis:'综合所得包括工资薪金所得、劳务报酬所得、稿酬所得、特许权使用费所得。'},
+  {year:2021,type:'single',text:'根据劳动合同法律制度的规定，下列关于劳动报酬的表述中，不正确的是（　）。',options:['工资应当以法定货币支付','工资至少每月支付一次','在法定休假日安排工作的，支付不低于工资300%的工资报酬','在休息日安排工作又不能安排补休的，支付不低于工资200%的工资报酬'],answer:[1],analysis:'工资至少每月支付一次的表述不够准确，应理解为实行月薪制的，工资每月支付一次；实行日薪制的，可按日或按周支付。但根据法律规定，工资应当以货币形式按月支付给劳动者本人。'},
+  {year:2020,type:'single',text:'根据支付结算法律制度的规定，下列关于国内信用证的表述中，正确的是（　）。',options:['国内信用证可以支取现金','国内信用证为不可撤销的跟单信用证','国内信用证的有效期最长不超过6个月','国内信用证的开证行可以是任何银行'],answer:[1],analysis:'国内信用证为不可撤销的跟单信用证；不可支取现金；有效期最长不超过1年；开证行须为银行业金融机构。'},
+  {year:2020,type:'single',text:'根据企业所得税法律制度的规定，下列各项中，属于不征税收入的是（　）。',options:['国债利息收入','财政拨款','符合条件的居民企业之间的股息收入','技术转让所得'],answer:[1],analysis:'不征税收入包括财政拨款、依法收取并纳入财政管理的行政事业性收费和政府性基金。选项A、C为免税收入；选项D为减免税优惠。'},
+  {year:2020,type:'single',text:'根据劳动合同法律制度的规定，用人单位自用工之日起超过1个月不满1年未与劳动者订立书面劳动合同的，应当向劳动者每月支付（　）倍的工资。',options:['1','1.5','2','3'],answer:[2],analysis:'用人单位自用工之日起超过1个月不满1年未与劳动者订立书面劳动合同的，应当向劳动者每月支付2倍的工资。'},
+  {year:2024,type:'multi',text:'根据支付结算法律制度的规定，关于票据追索权行使的下列表述中，正确的有（　）。',options:['持票人收到拒绝证明后，应当将被拒绝事由书面通知其前手','汇票被拒绝承兑的，持票人可以行使追索权','持票人可以对出票人、背书人、承兑人和保证人中的任何一人、数人或全体行使追索权','持票人不能出示拒绝证明或退票理由书的，丧失对全部票据债务人的追索权'],answer:[0,1,2],analysis:'选项D：持票人不能出示拒绝证明、退票理由书的，丧失对其前手的追索权，但承兑人或者付款人仍应当对持票人承担责任。'},
+  {year:2024,type:'multi',text:'下列哪些属于生活服务？（　）',options:['餐饮住宿','教育','旅游','家政服务'],answer:[0,1,2,3],analysis:'生活服务业包括餐饮业、旅店业、教育业、旅游业、家政服务业等服务。'},
+  {year:2024,type:'multi',text:'下列哪些可以简易计税？（　）',options:['装卸搬运','仓储服务','文化体育','餐饮服务'],answer:[0,1,2],analysis:'装卸搬运、仓储服务、文化体育服务可以选择简易计税方法。餐饮服务一般适用一般计税方法。'},
+  {year:2023,type:'multi',text:'根据支付结算法律制度的规定，下列选项所述票据丢失后，可以挂失止付的有（　）。',options:['未承兑的商业汇票','转账支票','现金支票','填明"现金"字样的银行汇票'],answer:[1,2,3],analysis:'可以挂失止付的票据包括：已承兑的商业汇票、支票、填明"现金"字样和代理付款人的银行汇票、填明"现金"字样的银行本票。未承兑的商业汇票不能挂失止付。'},
+  {year:2023,type:'multi',text:'根据支付结算法律制度的规定，下列各项中，属于商业汇票持票人向银行办理贴现必须具备的条件有（　）。',options:['票据未到期','持票人与出票人或者直接前手之间具有真实的商品交易关系','持票人是在银行开立有存款账户的企业法人或者其他组织','票据未记载"不得转让"事项'],answer:[0,1,2,3],analysis:'商业汇票的持票人向银行办理贴现必须具备的条件有：（1）票据未到期；（2）票据未记载"不得转让"事项；（3）持票人是在银行开立存款账户的企业法人以及其他组织；（4）持票人与出票人或者直接前手之间具有真实的商品交易关系。'},
+  {year:2022,type:'multi',text:'超额累进税率适用的情形有（　）。',options:['工资薪金所得','个体工商户生产经营所得','利息股息红利所得','财产转让所得'],answer:[0,1],analysis:'工资薪金所得适用超额累进税率（3%-45%）；个体工商户生产经营所得适用超额累进税率（5%-35%）；利息股息红利所得和财产转让所得适用比例税率20%。'},
+  {year:2022,type:'multi',text:'下列哪些是企业所得税一次性收入？（　）',options:['股息','红利','特许权使用费收入','租金'],answer:[0,1],analysis:'股息、红利等权益性投资收益属于企业所得税一次性收入。特许权使用费收入和租金收入属于分期确认的收入。'},
+  {year:2021,type:'multi',text:'根据增值税法律制度的规定，下列各项中，免征增值税的有（　）。',options:['农业生产者销售的自产农产品','避孕药品和用具','直接用于科学研究的进口仪器','个人销售自建自用住房'],answer:[0,1,2,3],analysis:'以上选项均属于免征增值税的项目。'},
+  {year:2021,type:'multi',text:'根据劳动合同法律制度的规定，下列各项中，用人单位不得解除劳动合同的情形有（　）。',options:['劳动者患病在规定的医疗期内','女职工在孕期、产期、哺乳期','劳动者在本单位连续工作满10年且距法定退休年龄不足5年','劳动者因工负伤并被确认丧失劳动能力'],answer:[0,1,3],analysis:'选项C应为在本单位连续工作满15年且距法定退休年龄不足5年。选项A、B、D均属于不得解除劳动合同的情形。'},
+  {year:2020,type:'multi',text:'根据支付结算法律制度的规定，下列关于办理汇兑业务的表述中，正确的有（　）。',options:['汇款回单可以作为该笔汇款已转入收账人账户的证明','汇兑凭证记载的汇款人、收款人在银行开立存款账户的，必须记载其账号','汇款回单是汇出银行受理汇款的依据','收款通知是银行将款项确已收入收款人账户的凭据'],answer:[1,2,3],analysis:'汇款回单是汇出银行受理汇款的依据，不能作为该笔汇款已转入收账人账户的证明。收款通知才是款项已入账户的凭据。'},
+  {year:2020,type:'multi',text:'根据社会保险法律制度的规定，下列各项中，属于职工基本养老保险缴费主体的有（　）。',options:['用人单位','职工个人','政府补贴','用人单位和职工共同缴费'],answer:[0,1],analysis:'职工基本养老保险由用人单位和职工共同缴纳基本养老保险费。政府补贴属于基金来源但不属于缴费主体。'},
+  {year:2024,type:'judge',text:'处于失业期仍然享受基本医疗保险。（　）',options:['正确','错误'],answer:[0],analysis:'失业人员在领取失业保险金期间，参加职工基本医疗保险，享受基本医疗保险待遇。'},
+  {year:2024,type:'judge',text:'把房子无偿赠予父亲，赠予方和接受方都不缴纳个人所得税。（　）',options:['正确','错误'],answer:[0],analysis:'房屋产权所有人将房屋产权无偿赠与配偶、父母、子女等直系亲属的，对当事双方不征收个人所得税。'},
+  {year:2024,type:'judge',text:'对于逾期未缴纳的税有意见的，应该先不用缴税，直接复议。（　）',options:['正确','错误'],answer:[1],analysis:'纳税人、扣缴义务人、纳税担保人同税务机关在纳税上发生争议时，必须先依照税务机关的纳税决定缴纳或者解缴税款及滞纳金，然后可以依法申请行政复议。'},
+  {year:2023,type:'judge',text:'票据的出票日期必须使用中文大写。（　）',options:['正确','错误'],answer:[0],analysis:'票据的出票日期必须使用中文大写。使用小写填写的，银行不予受理。'},
+  {year:2023,type:'judge',text:'一般存款账户可以办理现金缴存和现金支取。（　）',options:['正确','错误'],answer:[1],analysis:'一般存款账户可以办理现金缴存，但不得办理现金支取。'},
+  {year:2023,type:'judge',text:'背书人在汇票上记载"不得转让"字样，其后手再背书转让的，原背书人对后手的被背书人不承担保证责任。（　）',options:['正确','错误'],answer:[0],analysis:'背书人在汇票上记载"不得转让"字样，其后手再背书转让的，原背书人对后手的被背书人不承担保证责任，但不影响出票人、承兑人以及原背书人之后手背书人的票据责任。'},
+  {year:2022,type:'judge',text:'用人单位自用工之日起即与劳动者建立劳动关系。（　）',options:['正确','错误'],answer:[0],analysis:'用人单位自用工之日起即与劳动者建立劳动关系。'},
+  {year:2022,type:'judge',text:'劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。（　）',options:['正确','错误'],answer:[0],analysis:'劳动合同仅约定试用期的，试用期不成立，该期限为劳动合同期限。'},
+  {year:2021,type:'judge',text:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。（　）',options:['正确','错误'],answer:[0],analysis:'纳税人发生纳税义务，未按照规定的期限办理纳税申报，经税务机关责令限期申报，逾期仍不申报的，税务机关有权核定其应纳税额。'},
+  {year:2021,type:'judge',text:'商业承兑汇票的付款人收到出票人的付款通知后，应当于当日通知银行付款。（　）',options:['正确','错误'],answer:[1],analysis:'商业承兑汇票的付款人收到开户银行的付款通知，应当在当日通知银行付款。付款人在接到通知日的次日起3日内（遇法定休假日顺延）未通知银行付款的，视同付款人承诺付款。'},
+  {year:2020,type:'judge',text:'劳动合同被确认为无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。（　）',options:['正确','错误'],answer:[0],analysis:'劳动合同被确认为无效，劳动者已付出劳动的，用人单位应当向劳动者支付劳动报酬。'},
+  {year:2020,type:'judge',text:'行政复议期间被申请人可以自行向申请人收集证据。（　）',options:['正确','错误'],answer:[1],analysis:'行政复议期间被申请人不得自行向申请人和其他有关组织或者个人收集证据。'},
+  {year:2024,type:'indefinite',text:'甲公司为增值税一般纳税人，2023年12月发生如下业务：（1）销售货物取得含税销售额113000元；（2）购进原材料取得增值税专用发票注明价款60000元，增值税7800元；（3）支付运输费用取得增值税专用发票注明运费10000元，增值税900元。已知增值税税率为13%，运输服务税率为9%。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为13000元','业务（2）的进项税额为7800元','业务（3）的进项税额为900元','甲公司当月应纳增值税为4300元'],answer:[0,1,2,3],analysis:'销项税额=113000÷(1+13%)×13%=13000元；进项税额=7800+900=8700元；应纳增值税=13000-8700=4300元。'},
+  {year:2023,type:'indefinite',text:'甲公司2023年工资总额为1000万元，发生如下与个人所得税相关的业务：（1）支付员工张某工资15000元/月，专项扣除3000元/月，专项附加扣除2000元/月；（2）支付员工李某劳务报酬10000元；（3）支付员工王某稿酬8000元。根据上述资料，下列说法正确的有（　）。',options:['张某当月预扣预缴个人所得税为300元','李某当月预扣预缴劳务报酬个人所得税为1600元','王某当月预扣预缴稿酬所得个人所得税为896元','稿酬所得的收入额按照收入减除20%费用后再减按70%计算'],answer:[1,2,3],analysis:'张某：应纳税所得额=15000-5000-3000-2000=5000元，预扣预缴=5000×10%-210=290元（非300元）；李某：劳务报酬10000元，预扣预缴=10000×(1-20%)×20%=1600元；王某：稿酬8000元，预扣预缴=8000×(1-20%)×70%×20%=896元。稿酬所得收入额=收入×(1-20%)×70%。'},
+  {year:2022,type:'indefinite',text:'甲公司为增值税一般纳税人，2022年发生如下与房产相关的业务：（1）公司自用厂房原值500万元，已提折旧200万元；（2）出租商铺一间，年租金收入24万元；（3）将一栋原值300万元的办公楼无偿赠与关联企业。已知当地规定的房产税扣除比例为30%，从租计征税率为12%，从价计征税率为1.2%。根据上述资料，下列说法正确的有（　）。',options:['自用厂房应缴纳房产税4.2万元','出租商铺应缴纳房产税2.88万元','无偿赠与办公楼不缴纳房产税','甲公司2022年应缴纳房产税合计7.08万元'],answer:[0,1,3],analysis:'自用厂房房产税=500×(1-30%)×1.2%=4.2万元；出租商铺房产税=24×12%=2.88万元；无偿赠与办公楼由受赠方缴纳房产税，甲公司不缴；合计=4.2+2.88=7.08万元。'},
+  {year:2021,type:'indefinite',text:'张某为中国公民，2021年取得如下收入：（1）每月工资20000元，每月专项扣除4000元，专项附加扣除3000元；（2）3月取得特许权使用费收入50000元；（3）6月取得利息收入2000元（国债利息）。根据上述资料，下列说法正确的有（　）。',options:['张某全年工资预扣预缴个人所得税为9480元','特许权使用费预扣预缴个人所得税为8000元','国债利息收入免征个人所得税','张某综合所得汇算清缴应补（退）税额为退税'],answer:[0,1,2],analysis:'全年工资应纳税所得额=(20000-5000-4000-3000)×12=96000元，预扣预缴=96000×10%-2520=7080元（注：按累计预扣法计算，此处简化）；特许权使用费预扣预缴=50000×(1-20%)×20%=8000元；国债利息免征个税。'},
+  {year:2020,type:'indefinite',text:'甲公司为增值税一般纳税人，2020年发生如下与增值税相关的业务：（1）销售货物取得不含税销售额200000元，适用税率13%；（2）购进原材料取得增值税专用发票注明价款100000元，增值税13000元；（3）支付广告费取得增值税专用发票注明金额20000元，增值税1200元；（4）将自产货物用于职工福利，该批货物成本为30000元，不含税市场售价为50000元。根据上述资料，下列说法正确的有（　）。',options:['业务（1）的销项税额为26000元','业务（4）的销项税额为6500元','甲公司当月可抵扣的进项税额为14200元','甲公司当月应纳增值税为18300元'],answer:[0,1,2,3],analysis:'销项税额=200000×13%+50000×13%=26000+6500=32500元；进项税额=13000+1200=14200元；应纳增值税=32500-14200=18300元。将自产货物用于职工福利视同销售，需计算销项税额。'},
+]
+};
+
+const SUBJECT_CONFIG = {
+  practice: {name:'初级会计实务',time:105,singleCount:20,multiCount:10,judgeCount:10,indefCount:15,singleScore:2,multiScore:2,judgeScore:1,indefScore:2},
+  law: {name:'经济法基础',time:75,singleCount:23,multiCount:10,judgeCount:10,indefCount:12,singleScore:2,multiScore:2,judgeScore:1,indefScore:2}
+};
+
+let state = {
+  subject: null,
+  years: [2024],
+  mode: 'exam',
+  questions: [],
+  currentIndex: 0,
+  answers: {},
+  timer: null,
+  timeLeft: 0,
+  submitted: false,
+  reviewMode: false
+};
+
+function selectSubject(subject) {
+  state.subject = subject;
+  document.getElementById('setupTitle').textContent = SUBJECT_CONFIG[subject].name;
+  renderYearTags();
+  showPage('setupPage');
+}
+
+function renderYearTags() {
+  const years = [...new Set(QUESTIONS[state.subject].map(q => q.year))].sort((a,b) => b - a);
+  const container = document.getElementById('yearTags');
+  container.innerHTML = years.map(y =>
+    `<div class="year-tag ${state.years.includes(y)?'active':''}" onclick="toggleYear(this,${y})">${y}年</div>`
+  ).join('');
+}
+
+function toggleYear(el, year) {
+  if (state.years.includes(year)) {
+    state.years = state.years.filter(y => y !== year);
+    el.classList.remove('active');
+  } else {
+    state.years.push(year);
+    el.classList.add('active');
+  }
+}
+
+function selectMode(el, mode) {
+  state.mode = mode;
+  document.querySelectorAll('.mode-option').forEach(o => o.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function startExam() {
+  if (state.years.length === 0) {
+    alert('请至少选择一个年份');
+    return;
+  }
+  const pool = QUESTIONS[state.subject].filter(q => state.years.includes(q.year));
+  if (pool.length === 0) {
+    alert('所选年份暂无题目');
+    return;
+  }
+  const config = SUBJECT_CONFIG[state.subject];
+  const questions = generateExam(pool, config);
+  state.questions = questions;
+  state.currentIndex = 0;
+  state.answers = {};
+  state.submitted = false;
+  state.reviewMode = false;
+  state.timeLeft = config.time * 60;
+  document.getElementById('examSubjectName').textContent = config.name;
+  renderQuestionNav();
+  renderQuestion();
+  showPage('examPage');
+  if (state.mode === 'exam') {
+    startTimer();
+  } else {
+    document.getElementById('examTimer').textContent = '练习模式';
+  }
+}
+
+function generateExam(pool, config) {
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  const singles = shuffled.filter(q => q.type === 'single');
+  const multis = shuffled.filter(q => q.type === 'multi');
+  const judges = shuffled.filter(q => q.type === 'judge');
+  const indefs = shuffled.filter(q => q.type === 'indefinite');
+  const result = [];
+  const pick = (arr, n) => {
+    const s = [...arr].sort(() => Math.random() - 0.5);
+    for (let i = 0; i < Math.min(n, s.length); i++) result.push(s[i]);
+  };
+  pick(singles, config.singleCount);
+  pick(multis, config.multiCount);
+  pick(judges, config.judgeCount);
+  pick(indefs, config.indefCount);
+  if (result.length < 10) {
+    const remaining = shuffled.filter(q => !result.includes(q));
+    result.push(...remaining);
+  }
+  return result.sort(() => Math.random() - 0.5);
+}
+
+function startTimer() {
+  clearInterval(state.timer);
+  state.timer = setInterval(() => {
+    state.timeLeft--;
+    if (state.timeLeft <= 0) {
+      clearInterval(state.timer);
+      submitExam();
+      return;
+    }
+    const m = Math.floor(state.timeLeft / 60);
+    const s = state.timeLeft % 60;
+    document.getElementById('examTimer').textContent = `⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  }, 1000);
+}
+
+function renderQuestionNav() {
+  const nav = document.getElementById('questionNav');
+  nav.innerHTML = state.questions.map((_, i) =>
+    `<div class="q-nav-item ${i===state.currentIndex?'current':''} ${state.answers[i]!==undefined?'answered':''}" onclick="goToQuestion(${i})">${i+1}</div>`
+  ).join('');
+}
+
+function renderQuestion() {
+  const q = state.questions[state.currentIndex];
+  const area = document.getElementById('questionArea');
+  const typeMap = {single:'单选题',multi:'多选题',judge:'判断题',indefinite:'不定项'};
+  const typeClass = {single:'single',multi:'multi',judge:'judge',indefinite:'indefinite'};
+  const config = SUBJECT_CONFIG[state.subject];
+  const scorePerQ = q.type === 'judge' ? config.judgeScore : q.type === 'single' ? config.singleScore : q.type === 'multi' ? config.multiScore : config.indefScore;
+  const isMulti = q.type === 'multi' || q.type === 'indefinite';
+  const letters = ['A','B','C','D','E','F'];
+  const selected = state.answers[state.currentIndex] || [];
+
+  let optionsHtml = q.options.map((opt, i) => {
+    let cls = '';
+    if (state.reviewMode) {
+      if (q.answer.includes(i)) cls = 'correct';
+      else if (selected.includes(i)) cls = 'wrong';
+    } else if (selected.includes(i)) {
+      cls = 'selected';
+    }
+    return `<div class="option-item ${cls}" onclick="selectOption(${i})">
+      <span class="opt-letter">${letters[i]}</span>
+      <span>${opt}</span>
+    </div>`;
+  }).join('');
+
+  let analysisHtml = '';
+  if (state.reviewMode) {
+    analysisHtml = `<div class="answer-analysis">
+      <h4>答案解析</h4>
+      <p><strong>正确答案：</strong>${q.answer.map(a => letters[a]).join('、')}</p>
+      <p>${q.analysis}</p>
+    </div>`;
+  }
+
+  area.innerHTML = `
+    <span class="q-type-badge ${typeClass[q.type]}">${typeMap[q.type]}（${scorePerQ}分）</span>
+    <div class="question-text">${state.currentIndex + 1}. ${q.text}</div>
+    <div class="options-list">${optionsHtml}</div>
+    ${analysisHtml}
+  `;
+
+  document.getElementById('progressFill').style.width = `${((state.currentIndex + 1) / state.questions.length) * 100}%`;
+  document.getElementById('nextBtn').textContent = state.currentIndex === state.questions.length - 1 ? '交卷' : '下一题';
+  renderQuestionNav();
+}
+
+function selectOption(index) {
+  if (state.reviewMode) return;
+  const q = state.questions[state.currentIndex];
+  const isMulti = q.type === 'multi' || q.type === 'indefinite';
+  let selected = state.answers[state.currentIndex] || [];
+
+  if (isMulti) {
+    if (selected.includes(index)) {
+      selected = selected.filter(i => i !== index);
+    } else {
+      selected = [...selected, index];
+    }
+  } else {
+    selected = [index];
+  }
+
+  state.answers[state.currentIndex] = selected;
+  renderQuestion();
+
+  if (state.mode === 'practice' && q.type === 'single' || q.type === 'judge') {
+    setTimeout(() => {
+      state.reviewMode = true;
+      renderQuestion();
+      setTimeout(() => { state.reviewMode = false; renderQuestion(); }, 1500);
+    }, 300);
+  }
+}
+
+function goToQuestion(index) {
+  state.currentIndex = index;
+  if (state.mode === 'practice') state.reviewMode = false;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (state.currentIndex === state.questions.length - 1) {
+    showSheet();
+    return;
+  }
+  state.currentIndex++;
+  if (state.mode === 'practice') state.reviewMode = false;
+  renderQuestion();
+}
+
+function showSheet() {
+  const grid = document.getElementById('sheetGrid');
+  grid.innerHTML = state.questions.map((_, i) => {
+    let cls = state.answers[i] !== undefined ? 'answered' : '';
+    if (i === state.currentIndex) cls += ' current';
+    return `<div class="sheet-item ${cls}" onclick="sheetGo(${i})">${i+1}</div>`;
+  }).join('');
+  document.getElementById('sheetModal').classList.add('show');
+}
+
+function hideSheet() {
+  document.getElementById('sheetModal').classList.remove('show');
+}
+
+function sheetGo(index) {
+  state.currentIndex = index;
+  if (state.mode === 'practice') state.reviewMode = false;
+  renderQuestion();
+  hideSheet();
+}
+
+function submitExam() {
+  const unanswered = state.questions.length - Object.keys(state.answers).length;
+  if (unanswered > 0 && !state.reviewMode) {
+    document.getElementById('confirmMsg').textContent = `您还有 ${unanswered} 题未作答，确定要交卷吗？`;
+    document.getElementById('confirmModal').classList.add('show');
+    return;
+  }
+  doSubmit();
+}
+
+function confirmSubmit() {
+  hideConfirm();
+  doSubmit();
+}
+
+function hideConfirm() {
+  document.getElementById('confirmModal').classList.remove('show');
+}
+
+function doSubmit() {
+  clearInterval(state.timer);
+  state.submitted = true;
+  const config = SUBJECT_CONFIG[state.subject];
+  let totalScore = 0;
+  const typeScores = {single:{earned:0,total:0},multi:{earned:0,total:0},judge:{earned:0,total:0},indefinite:{earned:0,total:0}};
+  const wrongList = [];
+
+  state.questions.forEach((q, i) => {
+    const selected = state.answers[i] || [];
+    const scorePerQ = q.type === 'judge' ? config.judgeScore : q.type === 'single' ? config.singleScore : q.type === 'multi' ? config.multiScore : config.indefScore;
+    typeScores[q.type].total += scorePerQ;
+    let earned = 0;
+    if (q.type === 'multi' || q.type === 'indefinite') {
+      if (selected.length > 0 && selected.every(s => q.answer.includes(s))) {
+        if (selected.length === q.answer.length) {
+          earned = scorePerQ;
+        } else {
+          earned = scorePerQ * selected.length / q.answer.length;
+        }
+      }
+    } else {
+      if (selected.length === 1 && q.answer.includes(selected[0])) {
+        earned = scorePerQ;
+      }
+    }
+    totalScore += earned;
+    typeScores[q.type].earned += earned;
+    if (earned < scorePerQ) {
+      const letters = ['A','B','C','D','E','F'];
+      wrongList.push({
+        index: i,
+        text: q.text,
+        yourAnswer: selected.map(s => letters[s]).join('、') || '未作答',
+        correctAnswer: q.answer.map(a => letters[a]).join('、'),
+        analysis: q.analysis
+      });
+    }
+  });
+
+  totalScore = Math.round(totalScore * 10) / 10;
+  document.getElementById('resultScore').textContent = totalScore;
+  const statusEl = document.getElementById('resultStatus');
+  if (totalScore >= 60) {
+    statusEl.textContent = '🎉 恭喜通过！';
+    statusEl.className = 'score-status pass';
+  } else {
+    statusEl.textContent = '💪 继续加油！';
+    statusEl.className = 'score-status fail';
+  }
+
+  const answered = Object.keys(state.answers).length;
+  const correct = state.questions.filter((q, i) => {
+    const s = state.answers[i] || [];
+    if (q.type === 'multi' || q.type === 'indefinite') {
+      return s.length > 0 && s.every(x => q.answer.includes(x)) && s.length === q.answer.length;
+    }
+    return s.length === 1 && q.answer.includes(s[0]);
+  }).length;
+
+  document.getElementById('resultStats').innerHTML = `
+    <div class="result-stat"><div class="rs-val">${answered}</div><div class="rs-label">已答题</div></div>
+    <div class="result-stat"><div class="rs-val">${correct}</div><div class="rs-label">答对题数</div></div>
+    <div class="result-stat"><div class="rs-val">${state.questions.length - correct}</div><div class="rs-label">答错题数</div></div>
+  `;
+
+  const typeMap = {single:'单选题',multi:'多选题',judge:'判断题',indefinite:'不定项'};
+  const typeColor = {single:'#4F6EF7',multi:'#D48806',judge:'#389E0D',indefinite:'#CF1322'};
+  document.getElementById('resultDetail').innerHTML = `
+    <h3>各题型得分</h3>
+    <div class="type-summary">
+      ${Object.entries(typeScores).map(([type, scores]) => `
+        <div class="type-row">
+          <div class="tr-left"><div class="tr-dot" style="background:${typeColor[type]}"></div><div class="tr-name">${typeMap[type]}</div></div>
+          <div class="tr-score"><span>${scores.earned}</span> / ${scores.total}</div>
+        </div>
+      `).join('')}
+    </div>
+    ${wrongList.length > 0 ? `<h3>错题回顾（${wrongList.length}题）</h3><div class="wrong-list">${wrongList.slice(0, 10).map(w => `
+      <div class="wrong-item">
+        <div class="wi-q">${w.index + 1}. ${w.text.substring(0, 80)}${w.text.length > 80 ? '...' : ''}</div>
+        <div class="wi-ans">你的答案：<span class="wrong">${w.yourAnswer}</span>　正确答案：<span class="correct">${w.correctAnswer}</span></div>
+      </div>
+    `).join('')}</div>` : ''}
+  `;
+
+  showPage('resultPage');
+}
+
+function reviewExam() {
+  state.reviewMode = true;
+  state.currentIndex = 0;
+  showPage('examPage');
+  document.getElementById('examTimer').textContent = '查看解析';
+  renderQuestion();
+  const footer = document.querySelector('.exam-footer');
+  footer.innerHTML = '<button class="btn btn-primary" onclick="goHome()" style="flex:1">返回首页</button>';
+}
+
+function goHome() {
+  clearInterval(state.timer);
+  state = {subject:null,years:[2024],mode:'exam',questions:[],currentIndex:0,answers:{},timer:null,timeLeft:0,submitted:false,reviewMode:false};
+  const footer = document.querySelector('.exam-footer');
+  footer.innerHTML = `
+    <button class="btn btn-outline" onclick="showSheet()">答题卡</button>
+    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">下一题</button>
+  `;
+  showPage('homePage');
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
